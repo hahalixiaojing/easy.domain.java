@@ -18,9 +18,9 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 			IApplication application) {
 
 		List<Method> methods = Arrays
-				.stream(application.getClass().getDeclaredMethods())
+				.stream(application.getClass().getMethods())
 				.filter(m -> m.getReturnType() == IReturn.class
-						&& m.getModifiers() == 1).collect(Collectors.toList());
+						&& Modifier.isPublic(m.getModifiers()) && !Modifier.isAbstract(m.getModifiers())).collect(Collectors.toList());
 
 		String packagename = application.getClass().getName()
 				.substring(0, application.getClass().getName().length() - 11);

@@ -16,17 +16,12 @@ public class BaseApplication implements IApplication {
 	private final HashMap<String, List<ISubscriber>> DOMAINEVENTS = new HashMap<String, List<ISubscriber>>();
 
 	public BaseApplication() {
-		this.registerReturnTransformer();
-		this.registerDomainEvents();
+		
 	}
 
-	public void registerReturnTransformer() {
-	}
+	
 
-	public void registerDomainEvents() {
-	}
-
-	public void registerReturnTransformer(String name,
+	void registerReturnTransformer(String name,
 			IReturnTransformer transformer) {
 
 		if (this.TRANSFORMER.containsKey(name)) {
@@ -39,7 +34,7 @@ public class BaseApplication implements IApplication {
 		}
 	}
 
-	public void registerDomainEvent(String name, ISubscriber item) {
+	void registerDomainEvent(String name, ISubscriber item) {
 		if (this.DOMAINEVENTS.containsKey(name)) {
 			this.DOMAINEVENTS.get(name).add(item);
 		}
@@ -57,7 +52,6 @@ public class BaseApplication implements IApplication {
 	private List<ISubscriber> getDomainEvents(String name){
 		return this.DOMAINEVENTS.get(name);
 	}
-	
 	
 	protected <T> IReturn write(String mName,T obj) {
 		DefaultReturn<T> ret = new DefaultReturn<T>(obj, this.getTransformer(mName));

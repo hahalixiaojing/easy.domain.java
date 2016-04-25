@@ -1,7 +1,7 @@
 package easy.domain.application;
-
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,18 +15,17 @@ public class DefaultDomainEventSubscriberLoader implements
 		IDomainEventSubscriberLoader {
 
 	private ClassLoader cl = getClass().getClassLoader();
-
-	private static final String[] excludeMethods = {
-			"registerReturnTransformer", "registerDomainEvents",
-			"registerReturnTransformer", "registerDomainEvent","find" };
+	
+	private String[] excluecMethths = {"notifyAll","notify","getClass","hashCode","equals","wait","toString"};
 
 	@Override
 	public HashMap<String, List<ISubscriber>> find(IApplication application) {
-
+	
 		Stream<Method> methods = Arrays.stream(
-				application.getClass().getDeclaredMethods()).filter(
-				m -> !Arrays.stream(excludeMethods).anyMatch(
-						s -> s.equals(m.getName())) && m.getModifiers() == 1);
+				application.getClass().getMethods()).filter(
+				m -> Modifier.isPublic(m.getModifiers()) 
+				&& !Modifier.isAbstract(m.getModifiers())
+				&& !Arrays.stream(excluecMethths).anyMatch(s->s.equals(m.getName())));
 
 		String packagename = application.getClass().getName()
 				.substring(0, application.getClass().getName().length() - 11);
