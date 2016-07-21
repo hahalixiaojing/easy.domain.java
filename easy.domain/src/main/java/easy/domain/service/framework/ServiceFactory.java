@@ -15,7 +15,7 @@ import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 
-import easy.core.InterfaceProxy;
+import easy.domain.utils.InterfaceProxy;
 
 public class ServiceFactory implements IServiceFactory {
 

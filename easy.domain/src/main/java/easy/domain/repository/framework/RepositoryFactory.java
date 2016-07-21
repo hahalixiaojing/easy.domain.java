@@ -17,7 +17,7 @@ import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 
-import easy.core.InterfaceProxy;
+import easy.domain.utils.InterfaceProxy;
 
 class RepositoryFactory implements IRepositoryFactory {
 
@@ -27,24 +27,22 @@ class RepositoryFactory implements IRepositoryFactory {
 		this.repositories = new HashMap<String, IDao>();
 		try {
 			this.load(stream);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	private void load(InputStream stream) throws FileNotFoundException, DocumentException,
-			ClassNotFoundException, InstantiationException,
+	private void load(InputStream stream) throws FileNotFoundException,
+			DocumentException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException {
 
 		SAXReader xmlReader = new SAXReader();
 		Document document = null;
 		try {
-			
+
 			document = xmlReader.read(stream);
-		}
-		catch (DocumentException e) {
+		} catch (DocumentException e) {
 			throw e;
 		}
 		Map<String, String> xmlMap = new HashMap<String, String>();
@@ -61,37 +59,38 @@ class RepositoryFactory implements IRepositoryFactory {
 			Element e = (Element) n;
 			String inter = e.attributeValue("interface");
 			String impl = e.attributeValue("implementation");
-			boolean enable_interceptor = Boolean.parseBoolean(e.attributeValue("enable_interceptor"));
+			boolean enable_interceptor = Boolean.parseBoolean(e
+					.attributeValue("enable_interceptor"));
 
 			Class<?> clsInter = Class.forName(inter);
 			Class<?> clsImpl = Class.forName(impl);
 
 			boolean isAssgin1 = clsInter.isAssignableFrom(clsImpl);
 			boolean isAssgin2 = IDao.class.isAssignableFrom(clsImpl);
-			
+
 			if (!isAssgin1 || !isAssgin2) {
 				throw new NotImplementedException(StringUtils.EMPTY);
 			}
-			
+
 			IDao dao = (IDao) clsImpl.newInstance();
-			if(enable_interceptor){
+			if (enable_interceptor) {
 				String ceptor = e.attributeValue("interceptor");
-				InterfaceProxy proxy = (InterfaceProxy) Class.forName(ceptor).newInstance();
-				
+				InterfaceProxy proxy = (InterfaceProxy) Class.forName(ceptor)
+						.newInstance();
+
 				dao = (IDao) proxy.bind(dao);
 			}
 			this.repositories.put(clsInter.getName(), dao);
 		}
 	}
+
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> cls){
+	public <T> T get(Class<T> cls) {
 		String name = cls.getName();
-		
-		if(this.repositories.containsKey(name)){
+
+		if (this.repositories.containsKey(name)) {
 			return (T) this.repositories.get(name);
 		}
 		return null;
 	}
 }
-
-

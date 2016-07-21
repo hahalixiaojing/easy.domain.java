@@ -2,7 +2,7 @@ package easy.domain.repository.framework.test;
 
 import java.lang.reflect.Method;
 
-import easy.core.InterfaceProxy;
+import easy.domain.utils.InterfaceProxy;
 
 public class DemoRepositoryProxy extends InterfaceProxy {
 	@Override
