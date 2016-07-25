@@ -85,8 +85,6 @@ public class DefaultDomainEventSubscriberLoader implements
 	private List<ISubscriber> subscribersFromJar(String jarfile,
 			String packageName) {
 
-		System.out.println("packageName=" + packageName);
-
 		ArrayList<ISubscriber> arrayList = new ArrayList<ISubscriber>();
 
 		try (JarFile jar = new JarFile(new File(jarfile))) {
