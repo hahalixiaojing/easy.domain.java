@@ -29,17 +29,18 @@ public class ApplicationFactory {
 
 		for (Entry<String, List<IReturnTransformer>> entry : transformers
 				.entrySet()) {
-			for (IReturnTransformer t : entry.getValue()) {
-				baseApplication.registerReturnTransformer(entry.getKey(), t);
-			}
+
+			baseApplication.registerReturnTransformer(entry.getKey(),
+					entry.getValue());
 		}
 
 		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
 				.find(baseApplication);
 		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
-			for (ISubscriber s : entry.getValue()) {
-				baseApplication.registerDomainEvent(entry.getKey(), s);
-			}
+
+			baseApplication.registerDomainEvent(entry.getKey(),
+					entry.getValue());
+
 		}
 
 		Application.put(application.getClass().getName(), baseApplication);

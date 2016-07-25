@@ -1,6 +1,5 @@
 package easy.domain.application;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,90 +15,56 @@ public class BaseApplication implements IApplication {
 	private final HashMap<String, List<ISubscriber>> DOMAINEVENTS = new HashMap<String, List<ISubscriber>>();
 
 	public BaseApplication() {
-		
+
 	}
 
-	
-
-	void registerReturnTransformer(String name,
-			IReturnTransformer transformer) {
-
-		if (this.TRANSFORMER.containsKey(name)) {
-			this.TRANSFORMER.get(name).add(transformer);
-		}
-		else {
-			List<IReturnTransformer> list = new ArrayList<IReturnTransformer>();
-			list.add(transformer);
-			this.TRANSFORMER.put(name, list);
-		}
+	void registerReturnTransformer(String name, List<IReturnTransformer> transformer) {
+		this.TRANSFORMER.put(name, transformer);
 	}
 
-	void registerDomainEvent(String name, ISubscriber item) {
-		if (this.DOMAINEVENTS.containsKey(name)) {
-			this.DOMAINEVENTS.get(name).add(item);
-		}
-		else {
-			List<ISubscriber> list = new ArrayList<ISubscriber>();
-			list.add(item);
-			this.DOMAINEVENTS.put(name, list);
-		}
+	void registerDomainEvent(String name, List<ISubscriber> item) {
+		this.DOMAINEVENTS.put(name, item);
 	}
-	
-	private List<IReturnTransformer> getTransformer(String name){
+
+	private List<IReturnTransformer> getTransformer(String name) {
 		return this.TRANSFORMER.get(name);
 	}
-	
-	private List<ISubscriber> getDomainEvents(String name){
+
+	private List<ISubscriber> getDomainEvents(String name) {
+
+		this.DOMAINEVENTS.values().stream().forEach(s -> System.out.println(s));
+
+		System.out.println(name);
 		return this.DOMAINEVENTS.get(name);
 	}
-	
-	protected <T> IReturn write(String mName,T obj) {
-		DefaultReturn<T> ret = new DefaultReturn<T>(obj, this.getTransformer(mName));
+
+	protected <T> IReturn write(String mName, T obj) {
+		DefaultReturn<T> ret = new DefaultReturn<T>(obj,
+				this.getTransformer(mName));
 		return ret;
 	}
-	
-	protected <T,EventDATA extends IDomainEvent> IReturn writeAndPublishDomainEvent(String mName, T obj, EventDATA eventData) {
-		try{
+
+	protected <T, EventDATA extends IDomainEvent> IReturn writeAndPublishDomainEvent(
+			String mName, T obj, EventDATA eventData) {
+		try {
 			this.publishEvent(mName, eventData);
+		} finally {
 		}
-		finally{}
-		
+
 		return this.write(mName, obj);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	protected <T extends IDomainEvent> void publishEvent(String mName,T obj) {
+	protected <T extends IDomainEvent> void publishEvent(String mName, T obj) {
 		List<ISubscriber> subscribers = this.getDomainEvents(mName);
-		
-		DomainEventPublisher publisher =new DomainEventPublisher();
-		
-		for(ISubscriber sub : subscribers){
-			publisher.subscribe((IDomainEventSubscriber<T>)sub);
+		System.out.println("subscribers=" + subscribers);
+		DomainEventPublisher publisher = new DomainEventPublisher();
+
+		for (ISubscriber sub : subscribers) {
+			publisher.subscribe((IDomainEventSubscriber<T>) sub);
 		}
-		
+
 		publisher.publish(obj);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
