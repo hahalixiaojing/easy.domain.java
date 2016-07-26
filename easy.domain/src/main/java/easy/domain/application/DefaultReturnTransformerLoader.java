@@ -43,7 +43,7 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 
 			URL url = cl.getResource(transformerPath.toLowerCase());
 			if (url == null) {
-				throw new NullPointerException(url + " is not found");
+				return hashMap;
 			}
 
 			List<IReturnTransformer> transformers = null;

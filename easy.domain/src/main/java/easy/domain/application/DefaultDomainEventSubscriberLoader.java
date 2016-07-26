@@ -53,7 +53,7 @@ public class DefaultDomainEventSubscriberLoader implements
 			URL url = this.getUrls(domainEventsPath.toLowerCase());
 
 			if (url == null) {
-				throw new NullPointerException(url + " is not found");
+				return hashMap;
 			}
 
 			List<ISubscriber> subscribers = null;

@@ -1,7 +1,10 @@
 package easy.domain.application;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.apache.commons.lang3.ObjectUtils;
 
 import easy.domain.event.DomainEventPublisher;
 import easy.domain.event.IDomainEvent;
@@ -18,7 +21,8 @@ public class BaseApplication implements IApplication {
 
 	}
 
-	void registerReturnTransformer(String name, List<IReturnTransformer> transformer) {
+	void registerReturnTransformer(String name,
+			List<IReturnTransformer> transformer) {
 		this.TRANSFORMER.put(name, transformer);
 	}
 
@@ -27,15 +31,13 @@ public class BaseApplication implements IApplication {
 	}
 
 	private List<IReturnTransformer> getTransformer(String name) {
-		return this.TRANSFORMER.get(name);
+		return ObjectUtils.defaultIfNull(this.TRANSFORMER.get(name),
+				new ArrayList<IReturnTransformer>(0));
 	}
 
 	private List<ISubscriber> getDomainEvents(String name) {
-
-		this.DOMAINEVENTS.values().stream().forEach(s -> System.out.println(s));
-
-		System.out.println(name);
-		return this.DOMAINEVENTS.get(name);
+		return ObjectUtils.defaultIfNull(this.DOMAINEVENTS.get(name),
+				new ArrayList<ISubscriber>(0));
 	}
 
 	protected <T> IReturn write(String mName, T obj) {
@@ -57,7 +59,7 @@ public class BaseApplication implements IApplication {
 	@SuppressWarnings("unchecked")
 	protected <T extends IDomainEvent> void publishEvent(String mName, T obj) {
 		List<ISubscriber> subscribers = this.getDomainEvents(mName);
-		System.out.println("subscribers=" + subscribers);
+
 		DomainEventPublisher publisher = new DomainEventPublisher();
 
 		for (ISubscriber sub : subscribers) {
