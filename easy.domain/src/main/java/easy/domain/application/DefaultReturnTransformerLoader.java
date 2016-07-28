@@ -15,11 +15,10 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+
+import easy.domain.utils.JarPathHelper;
 
 public class DefaultReturnTransformerLoader implements IReturnTransformerLoader {
-	private Logger logger = org.apache.log4j.LogManager
-			.getLogger(DefaultReturnTransformerLoader.class);
 	private ClassLoader cl = getClass().getClassLoader();
 
 	@Override
@@ -55,32 +54,16 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 						.replace('/', '.').toLowerCase(), url);
 			} else if (protocol.equals("jar")) {
 
-				String jarfilePath = this.jarFilePath(url.getFile());
-
-				logger.info(jarfilePath);
+				String jarfilePath =JarPathHelper.jarPath(url.getFile());
 
 				transformers = this.transformerFromJar(jarfilePath,
 						path.toLowerCase());
-
-				System.out.println("name=" + m.getName());
-				System.out.println("size=" + transformers.size());
 			}
 
 			hashMap.put(m.getName(), transformers);
 		}
 		return hashMap;
 	}
-
-	private String jarFilePath(String fullPathString) {
-		String[] lines = fullPathString.split("!");
-		String line0 = lines[0];
-		String line = StringUtils.stripStart(line0, "file:");
-		if (line.contains(":")) {
-			return StringUtils.stripStart(line, "/").trim();
-		}
-		return line.trim();
-	}
-
 	private List<IReturnTransformer> transformerFromJar(String jarfile,
 			String packageName) {
 		System.out.println("packname=" + packageName);

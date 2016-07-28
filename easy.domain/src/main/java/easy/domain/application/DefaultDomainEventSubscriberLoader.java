@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 
 import easy.domain.event.ISubscriber;
+import easy.domain.utils.JarPathHelper;
 
 public class DefaultDomainEventSubscriberLoader implements
 		IDomainEventSubscriberLoader {
@@ -63,7 +64,7 @@ public class DefaultDomainEventSubscriberLoader implements
 
 			} else if (url.getProtocol().equals("jar")) {
 
-				String jarfilePath = this.jarFilePath(url.getFile());
+				String jarfilePath = JarPathHelper.jarPath(url.getFile());
 				subscribers = this.subscribersFromJar(jarfilePath,
 						domainEventsPath.toLowerCase());
 			}
@@ -72,14 +73,6 @@ public class DefaultDomainEventSubscriberLoader implements
 		}
 
 		return hashMap;
-	}
-
-	private String jarFilePath(String fullPathString) {
-		String[] lines = fullPathString.split("!");
-		String line0 = lines[0];
-		String line = StringUtils.stripStart(line0, "file:/");
-
-		return line.trim();
 	}
 
 	private List<ISubscriber> subscribersFromJar(String jarfile,
