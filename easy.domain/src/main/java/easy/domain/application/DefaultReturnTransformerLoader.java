@@ -15,9 +15,11 @@ import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 public class DefaultReturnTransformerLoader implements IReturnTransformerLoader {
-
+	private Logger logger = org.apache.log4j.LogManager
+			.getLogger(DefaultReturnTransformerLoader.class);
 	private ClassLoader cl = getClass().getClassLoader();
 
 	@Override
@@ -55,6 +57,8 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 
 				String jarfilePath = this.jarFilePath(url.getFile());
 
+				logger.info(jarfilePath);
+
 				transformers = this.transformerFromJar(jarfilePath,
 						path.toLowerCase());
 
@@ -70,8 +74,10 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 	private String jarFilePath(String fullPathString) {
 		String[] lines = fullPathString.split("!");
 		String line0 = lines[0];
-		String line = StringUtils.stripStart(line0, "file:/");
-
+		String line = StringUtils.stripStart(line0, "file:");
+		if (line.contains(":")) {
+			return StringUtils.stripStart(line, "/").trim();
+		}
 		return line.trim();
 	}
 
