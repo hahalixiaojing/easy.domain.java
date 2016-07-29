@@ -107,10 +107,12 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 			if (Modifier.isAbstract(cls.getModifiers())) {
 				return null;
 			}
-			Object o = cls.newInstance();
-			if (o instanceof IReturnTransformer) {
-				return (IReturnTransformer) o;
+
+			boolean result = IReturnTransformer.class.isAssignableFrom(cls);
+			if (result) {
+				return (IReturnTransformer) cls.newInstance();
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
