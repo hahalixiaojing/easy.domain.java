@@ -120,9 +120,10 @@ public class DefaultDomainEventSubscriberLoader implements
 	private ISubscriber subscriberObject(String classpath) {
 		try {
 			Class<?> cls = Class.forName(classpath);
-			Object o = cls.newInstance();
-			if (o instanceof ISubscriber) {
-				return (ISubscriber) o;
+
+			boolean result = ISubscriber.class.isAssignableFrom(cls);
+			if (result) {
+				return (ISubscriber) cls.newInstance();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
