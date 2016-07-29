@@ -54,7 +54,7 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 						.replace('/', '.').toLowerCase(), url);
 			} else if (protocol.equals("jar")) {
 
-				String jarfilePath =JarPathHelper.jarPath(url.getFile());
+				String jarfilePath = JarPathHelper.jarPath(url.getFile());
 
 				transformers = this.transformerFromJar(jarfilePath,
 						path.toLowerCase());
@@ -64,39 +64,33 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 		}
 		return hashMap;
 	}
+
 	private List<IReturnTransformer> transformerFromJar(String jarfile,
 			String packageName) {
-		System.out.println("packname=" + packageName);
-		ArrayList<IReturnTransformer> arrayList = new ArrayList<IReturnTransformer>();
+
+		ArrayList<IReturnTransformer> arrayList = new ArrayList<>();
 
 		try (JarFile jar = new JarFile(new File(jarfile))) {
 
 			Enumeration<JarEntry> entries = jar.entries();
 
 			while (entries.hasMoreElements()) {
-				JarEntry jarEntry = entries.nextElement();
-				System.out.println(jarEntry.getName());
-				if (!jarEntry.getName().startsWith(packageName)
-						|| !jarEntry.getName().endsWith(".class")) {
+
+				String jarName = entries.nextElement().getName();
+
+				if (!jarName.startsWith(packageName)
+						|| !jarName.endsWith(".class")) {
 					continue;
 				}
-				Class<?> cls;
-				try {
-					String classpath = StringUtils.stripEnd(jarEntry.getName()
-							.replace('/', '.'), ".class");
 
-					cls = Class.forName(classpath);
-					if (Modifier.isAbstract(cls.getModifiers())) {
-						continue;
-					}
-					Object o = cls.newInstance();
-					if (o instanceof IReturnTransformer) {
-						IReturnTransformer trans = (IReturnTransformer) cls
-								.newInstance();
-						arrayList.add(trans);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				String classpath = StringUtils.stripEnd(
+						jarName.replace('/', '.'), ".class");
+
+				IReturnTransformer returnTransformer = this
+						.returnTransformer(classpath);
+
+				if (returnTransformer != null) {
+					arrayList.add(returnTransformer);
 				}
 			}
 
@@ -106,36 +100,35 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 		return arrayList;
 	}
 
+	private IReturnTransformer returnTransformer(String classpath) {
+		Class<?> cls;
+		try {
+			cls = Class.forName(classpath);
+			if (Modifier.isAbstract(cls.getModifiers())) {
+				return null;
+			}
+			Object o = cls.newInstance();
+			if (o instanceof IReturnTransformer) {
+				return (IReturnTransformer) o;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
 	private List<IReturnTransformer> transformerFromClasses(String packageName,
 			URL url) {
 
 		File file = new File(url.getFile());
 		String[] files = file.list();
 
-		return Arrays
-				.stream(files)
+		return Arrays.stream(files)
 				.map(m -> packageName + "." + m.substring(0, m.length() - 6))
-				.map(m -> {
-					Class<?> cls;
-					try {
-						cls = Class.forName(m);
-						if (Modifier.isAbstract(cls.getModifiers())) {
-							return null;
-						}
-						Object o = cls.newInstance();
-						if (o instanceof IReturnTransformer) {
-							IReturnTransformer trans = (IReturnTransformer) cls
-									.newInstance();
-							return trans;
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					return null;
-
-				}).filter(m -> m != null)
+				.map(this::returnTransformer).filter(m -> m != null)
 				.sorted((a, b) -> b.getOrder() - a.getOrder())
 				.collect(Collectors.toList());
 	}
-
 }

@@ -90,20 +90,13 @@ public class DefaultDomainEventSubscriberLoader implements
 						|| !jarEntry.getName().endsWith(".class")) {
 					continue;
 				}
-				Class<?> cls;
-				try {
-					String classpath = StringUtils.stripEnd(jarEntry.getName()
-							.replace('/', '.'), ".class");
 
-					cls = Class.forName(classpath);
-					Object o = cls.newInstance();
-					if (o instanceof ISubscriber) {
-						System.out.println("is subscriber");
-						ISubscriber sub = (ISubscriber) cls.newInstance();
-						arrayList.add(sub);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				String classpath = StringUtils.stripEnd(jarEntry.getName()
+						.replace('/', '.'), ".class");
+
+				ISubscriber subscriber = this.subscriberObject(classpath);
+				if (subscriber != null) {
+					arrayList.add(subscriber);
 				}
 			}
 
@@ -120,22 +113,21 @@ public class DefaultDomainEventSubscriberLoader implements
 
 		return Arrays.stream(files)
 				.map(m -> packageName + m.substring(0, m.length() - 6))
-				.map(m -> {
-					Class<?> cls;
-					try {
-						cls = Class.forName(m);
+				.map(this::subscriberObject).filter(m -> m != null)
+				.collect(Collectors.toList());
+	}
 
-						Object o = cls.newInstance();
-						if (o instanceof ISubscriber) {
-							ISubscriber sub = (ISubscriber) cls.newInstance();
-							return sub;
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					return null;
-
-				}).filter(m -> m != null).collect(Collectors.toList());
+	private ISubscriber subscriberObject(String classpath) {
+		try {
+			Class<?> cls = Class.forName(classpath);
+			Object o = cls.newInstance();
+			if (o instanceof ISubscriber) {
+				return (ISubscriber) o;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	private URL getUrls(String path) {
