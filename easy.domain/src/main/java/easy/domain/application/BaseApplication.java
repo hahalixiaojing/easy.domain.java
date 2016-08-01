@@ -28,9 +28,11 @@ public class BaseApplication implements IApplication {
 		this.TRANSFORMER.put(name, transformer);
 	}
 
-	void registerDomainEvent(String name, List<ISubscriber> item) {
-		
+	void registerSubscriber(String name, List<ISubscriber> item) {
 		this.manager.registerSubscriber(name, item);
+	}
+	void registerDomainEvent(List<Class<?>> events){
+		this.manager.registerDomainEvent(events);
 	}
 
 	private List<IReturnTransformer> getTransformer(String name) {

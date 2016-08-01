@@ -12,13 +12,14 @@ public class ApplicationFactory {
 	private static ApplicationFactory factory;
 	private IReturnTransformerLoader returnTransfomerLoader;
 	private IDomainEventSubscriberLoader domainEventSubscriberLoader;
-
+	private IDomainEventLoader domainEventLoader;
 	private ApplicationFactory(IReturnTransformerLoader transformerLoader,
 			IDomainEventSubscriberLoader subscriberLoader) {
 		this.returnTransfomerLoader = transformerLoader == null ? new DefaultReturnTransformerLoader()
 				: transformerLoader;
 		this.domainEventSubscriberLoader = subscriberLoader == null ? new DefaultDomainEventSubscriberLoader()
 				: subscriberLoader;
+		this.domainEventLoader =new DefaultDomainEventLoader();
 	}
 
 	public void register(IApplication application) {
@@ -38,10 +39,12 @@ public class ApplicationFactory {
 				.find(baseApplication);
 		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
 
-			baseApplication.registerDomainEvent(entry.getKey(),
+			baseApplication.registerSubscriber(entry.getKey(),
 					entry.getValue());
-
 		}
+		
+		List<Class<?>> domainEvents = this.domainEventLoader.load(baseApplication);
+		baseApplication.registerDomainEvent(domainEvents);
 
 		Application.put(application.getClass().getName(), baseApplication);
 	}
