@@ -11,9 +11,4 @@ public interface IDomainEventSubscriber<T extends IDomainEvent> extends ISubscri
      * 事件处理
      */
 	void handleEvent(T aDomainEvent);
-    /**
-     * 事件类型
-     * @return
-     */
-    Class<T> suscribedToEventType();
 }
