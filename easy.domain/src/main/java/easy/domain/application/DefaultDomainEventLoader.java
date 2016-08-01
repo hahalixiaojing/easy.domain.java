@@ -79,7 +79,7 @@ public class DefaultDomainEventLoader implements IDomainEventLoader {
 					continue;
 				}
 
-				String classpath = StringUtils.stripEnd(jarEntry.getName()
+				String classpath = StringUtils.remove(jarEntry.getName()
 						.replace('/', '.'), ".class");
 
 				Class<?> cls = Class.forName(classpath);

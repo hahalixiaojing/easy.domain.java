@@ -82,10 +82,10 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 						|| !jarName.endsWith(".class")) {
 					continue;
 				}
-
-				String classpath = StringUtils.stripEnd(
+				System.out.println(jarName);
+				String classpath = StringUtils.remove(
 						jarName.replace('/', '.'), ".class");
-
+				System.out.println(classpath);
 				IReturnTransformer returnTransformer = this
 						.returnTransformer(classpath);
 
@@ -103,7 +103,9 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 	private IReturnTransformer returnTransformer(String classpath) {
 		Class<?> cls;
 		try {
+			System.out.println(classpath);
 			cls = Class.forName(classpath);
+
 			if (Modifier.isAbstract(cls.getModifiers())) {
 				return null;
 			}

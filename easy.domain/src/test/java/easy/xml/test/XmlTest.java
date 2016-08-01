@@ -11,6 +11,7 @@ import java.util.OptionalInt;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -38,8 +39,7 @@ public class XmlTest {
 		Document document = null;
 		try {
 			document = xmlReader.read(path.toFile());
-		}
-		catch (DocumentException e) {
+		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
 
@@ -102,13 +102,23 @@ public class XmlTest {
 		constCls.toString();
 
 		int[] intArray = new int[] { 1, 2, 3 };
-		
+
 		OptionalInt result = Arrays.stream(intArray).reduce(Integer::sum);
-		
-		if(result.isPresent()){
+
+		if (result.isPresent()) {
 			System.out.println(result.getAsInt());
 		}
 
+	}
+
+	@Test
+	public void test2(){
+		String path = "com/demo/application/product/models/ToViewProductModel.class";
+		
+		String a =path.replace('/', '.');
+		String classpath = StringUtils.remove(a,".class");
+		
+		System.out.println(classpath);
 	}
 
 	interface IConst {
@@ -118,21 +128,22 @@ public class XmlTest {
 
 	class ConstClass {
 		public ConstClass(IConst constcls) {
-				
+
 		}
 	}
-	
-	enum Planet{
-		EARTH(1),
-		MARS(2);
-		
+
+	enum Planet {
+		EARTH(1), MARS(2);
+
 		private final int _id;
-		Planet(int id){
-			this._id= id;
+
+		Planet(int id) {
+			this._id = id;
 		}
-		public int id(){
+
+		public int id() {
 			return this._id;
 		}
-		
+
 	}
 }

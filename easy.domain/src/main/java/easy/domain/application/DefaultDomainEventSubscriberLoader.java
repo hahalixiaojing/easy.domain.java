@@ -91,7 +91,7 @@ public class DefaultDomainEventSubscriberLoader implements
 					continue;
 				}
 
-				String classpath = StringUtils.stripEnd(jarEntry.getName()
+				String classpath = StringUtils.remove(jarEntry.getName()
 						.replace('/', '.'), ".class");
 
 				ISubscriber subscriber = this.subscriberObject(classpath);
