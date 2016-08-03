@@ -2,8 +2,6 @@ package easy.domain.test;
 
 import java.util.Date;
 
-
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.*;
@@ -34,6 +32,9 @@ public class EntityRuleTest {
 
 		int size = user.getBrokenRules().size();
 		Assert.assertEquals(2, size);
+
+		user.getBrokenRules().stream()
+				.forEach(s -> System.out.println(s.getProperty()));
 	}
 
 	/**
@@ -190,7 +191,6 @@ class UserEntityRule extends EntityRule<User> {
 				return true;
 			}
 		}, UserBrokenRuleMessage.AGE_ERROR);
-		
-		
+
 	}
 }
