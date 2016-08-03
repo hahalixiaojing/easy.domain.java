@@ -45,8 +45,10 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param v
 	 * @param messageKey
 	 */
-	public <Value extends Number> void numberShouldGreaterThan(String property, Value v, String messageKey) {
-		NumberShouldGreaterThanRule<T, Value> rule = new NumberShouldGreaterThanRule<T, Value>(property, v);
+	public <Value extends Number> void numberShouldGreaterThan(String property,
+			Value v, String messageKey) {
+		NumberShouldGreaterThanRule<T, Value> rule = new NumberShouldGreaterThanRule<T, Value>(
+				property, v);
 		this.addRule(property, rule, messageKey);
 	}
 
@@ -57,8 +59,10 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param v
 	 * @param messageKey
 	 */
-	public <Value extends Number> void numberShouldLessThan(String property, Value v, String messageKey) {
-		NumberShouldLessThanRule<T, Value> rule = new NumberShouldLessThanRule<T, Value>(property, v);
+	public <Value extends Number> void numberShouldLessThan(String property,
+			Value v, String messageKey) {
+		NumberShouldLessThanRule<T, Value> rule = new NumberShouldLessThanRule<T, Value>(
+				property, v);
 
 		this.addRule(property, rule, messageKey);
 	}
@@ -70,8 +74,10 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param date
 	 * @param messageKey
 	 */
-	public void dateShouldGreaterThan(String property, Date date, String messageKey) {
-		DateShouldGreaterThanRule<T> rule = new DateShouldGreaterThanRule<T>(property, date);
+	public void dateShouldGreaterThan(String property, Date date,
+			String messageKey) {
+		DateShouldGreaterThanRule<T> rule = new DateShouldGreaterThanRule<T>(
+				property, date);
 
 		this.addRule(property, rule, messageKey);
 	}
@@ -84,7 +90,8 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param messageKey
 	 */
 	public void dateShouldLessThan(String property, Date date, String messageKey) {
-		DateShouldLessThanRule<T> rule = new DateShouldLessThanRule<T>(property, date);
+		DateShouldLessThanRule<T> rule = new DateShouldLessThanRule<T>(
+				property, date);
 
 		this.addRule(property, rule, messageKey);
 
@@ -97,7 +104,8 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param bool
 	 * @param messageKey
 	 */
-	public void BooleanShouldEqual(String property, boolean bool, String messageKey) {
+	public void BooleanShouldEqual(String property, boolean bool,
+			String messageKey) {
 		BooleanRule<T> rule = new BooleanRule<>(property, bool);
 		this.addRule(property, rule, messageKey);
 	}
@@ -109,8 +117,10 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * @param bool
 	 * @param messageKey
 	 */
-	public <Value extends Number> void numberShouldEqual(String property, Value value, String messageKey) {
-		NumberEqualRule<T, Value> rule = new NumberEqualRule<T, Value>(property, value);
+	public <Value extends Number> void numberShouldEqual(String property,
+			Value value, String messageKey) {
+		NumberEqualRule<T, Value> rule = new NumberEqualRule<T, Value>(
+				property, value);
 		this.addRule(property, rule, messageKey);
 	}
 
@@ -139,7 +149,7 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 			for (RuleItem<T> rule : entry.getValue()) {
 				if (!rule.getRule().isSatisfy(model)) {
 					isAllOk = false;
-					model.addBrokenRule(rule.getMessageKey());
+					model.addBrokenRule(rule.getMessageKey(), entry.getKey());
 					break;
 				}
 
