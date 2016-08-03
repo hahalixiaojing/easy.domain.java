@@ -6,7 +6,7 @@ import easy.domain.application.*;
 
 public class ApplicationFactoryTest {
 	@Test
-	public void loadTest() {
+	public void loadTest() throws Exception {
 
 		ApplicationFactory.instance().register(new DemoApplication());
 

@@ -14,7 +14,7 @@ public class DefaultReturn<T> implements IReturn {
 	}
 
 	@Override
-	public Object result(ReturnContext context) {
+	public Object result(ReturnContext context) throws Exception {
 
 		Optional<IReturnTransformer> result = this.transformer.stream()
 				.filter(m -> m.isMapped(context)).findFirst();

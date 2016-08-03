@@ -1,5 +1,5 @@
 package easy.domain.application;
 
 public interface IReturn {
-	Object result(ReturnContext context);
+	Object result(ReturnContext context) throws Exception;
 }
