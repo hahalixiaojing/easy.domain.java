@@ -43,7 +43,7 @@ public class DefaultDomainEventSubscriberLoader implements
 
 		String path = packagename.replace('.', '/');
 
-		HashMap<String, List<ISubscriber>> hashMap = new HashMap<String, List<ISubscriber>>();
+		HashMap<String, List<ISubscriber>> hashMap = new HashMap<>();
 
 		List<Method> methodList = methods.collect(Collectors.toList());
 		for (Method m : methodList) {
@@ -54,7 +54,7 @@ public class DefaultDomainEventSubscriberLoader implements
 			URL url = this.getUrls(domainEventsPath.toLowerCase());
 
 			if (url == null) {
-				return hashMap;
+				hashMap.put(m.getName(), new ArrayList<ISubscriber>(0));
 			}
 
 			List<ISubscriber> subscribers = null;

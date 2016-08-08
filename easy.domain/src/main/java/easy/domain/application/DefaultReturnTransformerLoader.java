@@ -24,7 +24,6 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 	@Override
 	public HashMap<String, List<IReturnTransformer>> find(
 			IApplication application) {
-
 		List<Method> methods = Arrays
 				.stream(application.getClass().getMethods())
 				.filter(m -> m.getReturnType() == IReturn.class
@@ -37,14 +36,15 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 
 		String path = packagename.replace('.', '/');
 
-		HashMap<String, List<IReturnTransformer>> hashMap = new HashMap<String, List<IReturnTransformer>>();
+		HashMap<String, List<IReturnTransformer>> hashMap = new HashMap<>();
 
 		for (Method m : methods) {
+			System.out.println(m.getName());
 			String transformerPath = path + "/" + m.getName();
 
 			URL url = cl.getResource(transformerPath.toLowerCase());
 			if (url == null) {
-				return hashMap;
+				hashMap.put(m.getName(), new ArrayList<IReturnTransformer>(0));
 			}
 
 			List<IReturnTransformer> transformers = null;
@@ -57,9 +57,8 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 				String jarfilePath = JarPathHelper.jarPath(url.getFile());
 
 				transformers = this.transformerFromJar(jarfilePath,
-						path.toLowerCase());
+						transformerPath.toLowerCase());
 			}
-
 			hashMap.put(m.getName(), transformers);
 		}
 		return hashMap;
