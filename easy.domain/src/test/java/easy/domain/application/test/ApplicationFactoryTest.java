@@ -1,14 +1,20 @@
 package easy.domain.application.test;
 
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import easy.domain.application.*;
 
 public class ApplicationFactoryTest {
+
+	@BeforeClass
+	public static void setUp() {
+		ApplicationFactory.instance().register(new DemoApplication());
+	}
+
 	@Test
 	public void loadTest() throws Exception {
-
-		ApplicationFactory.instance().register(new DemoApplication());
 
 		DemoApplication demo = ApplicationFactory.instance().get(
 				DemoApplication.class);
@@ -27,7 +33,16 @@ public class ApplicationFactoryTest {
 		Object obj3 = ret.result(new ReturnContext("", "8"));
 		System.out.print(Thread.currentThread().getId());
 		System.out.println(obj3);
-		
+
 		System.out.println(" ");
+	}
+
+	@Test
+	public void defaultValueTest() throws Exception {
+		String defaultValue = (String) (ApplicationFactory.instance()
+				.get(DemoApplication.class).defaultValueTest().resultDefault());
+		
+		Assert.assertEquals("default value", defaultValue);
+
 	}
 }

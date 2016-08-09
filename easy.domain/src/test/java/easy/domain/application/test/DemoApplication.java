@@ -15,6 +15,11 @@ public class DemoApplication extends BaseApplication {
 	}
 	private void update(){
 		
+		
+	}
+	
+	public IReturn defaultValueTest(){
+		return this.write("defaultValueTest", "default value");
 	}
 	
 	public IReturn save(){

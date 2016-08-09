@@ -55,6 +55,7 @@ public class DefaultDomainEventSubscriberLoader implements
 
 			if (url == null) {
 				hashMap.put(m.getName(), new ArrayList<ISubscriber>(0));
+				continue;
 			}
 
 			List<ISubscriber> subscribers = null;
