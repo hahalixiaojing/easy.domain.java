@@ -16,6 +16,6 @@ public class DefaultDomainEventSubscriberLoaderTest {
 		
 		HashMap<String, List<ISubscriber>> maps = loader.find(new DemoApplication());
 		
-		Assert.assertTrue(maps.size() == 2);
+		Assert.assertTrue(maps.size() == 3);
 	}
 }
