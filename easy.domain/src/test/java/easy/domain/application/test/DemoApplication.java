@@ -1,12 +1,12 @@
 package easy.domain.application.test;
 
 import easy.domain.application.BaseApplication;
-import easy.domain.application.IReturn;
+import easy.domain.application.BaseReturn;
 import easy.domain.application.test.demo.adddomainevents.DemoDomainEvent;
 import easy.domain.application.test.demo.savedomainevents.SaveDemoDomainEvent;
 
 public class DemoApplication extends BaseApplication {
-	public IReturn add(){
+	public BaseReturn<String> add(){
 		this.update();
 		
 		DemoDomainEvent evt = new DemoDomainEvent("addDomainEvents");
@@ -18,11 +18,11 @@ public class DemoApplication extends BaseApplication {
 		
 	}
 	
-	public IReturn defaultValueTest(){
+	public BaseReturn<String> defaultValueTest(){
 		return this.write("defaultValueTest", "default value");
 	}
 	
-	public IReturn save(){
+	public BaseReturn<String> save(){
 		SaveDemoDomainEvent evt =new SaveDemoDomainEvent("saveDomainEvents");
 		
 		return this.writeAndPublishDomainEvent("save", "save", evt);

@@ -2,8 +2,9 @@ package easy.domain.application;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
-public class DefaultReturn<T> implements IReturn {
+public class DefaultReturn<T> extends BaseReturn<T> {
 	private T obj;
 	private List<IReturnTransformer> transformer;
 	private static final NotFoundReturnTransformer noFound = new NotFoundReturnTransformer();
@@ -27,7 +28,13 @@ public class DefaultReturn<T> implements IReturn {
 	}
 
 	@Override
-	public Object resultDefault() throws Exception {
+	public T resultDefault() throws Exception {
 		return this.obj;
 	}
+
+	@Override
+	public <R> R resultToConvert(Function<T, R> func) throws Exception {
+		return func.apply(this.obj);
+	}
+	
 }

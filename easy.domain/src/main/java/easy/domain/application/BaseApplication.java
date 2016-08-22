@@ -23,15 +23,15 @@ public class BaseApplication implements IApplication {
 		this.manager = manager;
 	}
 
-	void registerReturnTransformer(String name,
+	public void registerReturnTransformer(String name,
 			List<IReturnTransformer> transformer) {
 		this.TRANSFORMER.put(name, transformer);
 	}
 
-	void registerSubscriber(String name, List<ISubscriber> item) {
+	public void registerSubscriber(String name, List<ISubscriber> item) {
 		this.manager.registerSubscriber(name, item);
 	}
-	void registerDomainEvent(List<Class<?>> events){
+	public void registerDomainEvent(List<Class<?>> events){
 		this.manager.registerDomainEvent(events);
 	}
 
@@ -40,13 +40,13 @@ public class BaseApplication implements IApplication {
 				new ArrayList<IReturnTransformer>(0));
 	}
 	
-	protected <T> IReturn write(String mName, T obj) {
+	protected <T> BaseReturn<T> write(String mName, T obj) {
 		DefaultReturn<T> ret = new DefaultReturn<T>(obj,
 				this.getTransformer(mName));
 		return ret;
 	}
 
-	protected <T, EventDATA extends IDomainEvent> IReturn writeAndPublishDomainEvent(
+	protected <T, EventDATA extends IDomainEvent> BaseReturn<T> writeAndPublishDomainEvent(
 			String mName, T obj, EventDATA eventData) {
 		try {
 			this.publishEvent(mName, eventData);

@@ -19,13 +19,23 @@ public class ApplicationFactoryTest {
 		DemoApplication demo = ApplicationFactory.instance().get(
 				DemoApplication.class);
 
-		IReturn ret = demo.add();
+		BaseReturn<String> ret = demo.add();
 		Object obj = ret.result(new ReturnContext());
+
+		String result1 = ret.resultDefault();
+		System.out.println(result1);
+
+		int len = ret.resultToConvert((s) -> {
+
+			return s.length();
+		});
+
+		System.out.println(len);
 
 		System.out.print(Thread.currentThread().getId());
 		System.out.println(obj);
 
-		IReturn ret2 = demo.save();
+		BaseReturn<String> ret2 = demo.save();
 		Object obj2 = ret2.result(new ReturnContext());
 		System.out.print(Thread.currentThread().getId());
 		System.out.println(obj2);
@@ -39,9 +49,9 @@ public class ApplicationFactoryTest {
 
 	@Test
 	public void defaultValueTest() throws Exception {
-		String defaultValue = (String) (ApplicationFactory.instance()
-				.get(DemoApplication.class).defaultValueTest().resultDefault());
-		
+		String defaultValue = ApplicationFactory.instance()
+				.get(DemoApplication.class).defaultValueTest().resultDefault();
+
 		Assert.assertEquals("default value", defaultValue);
 
 	}
