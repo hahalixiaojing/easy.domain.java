@@ -20,8 +20,6 @@ public class ApplicationFactoryTest {
 				DemoApplication.class);
 
 		BaseReturn<String> ret = demo.add();
-		Object obj = ret.result(new ReturnContext());
-
 		String result1 = ret.resultDefault();
 		System.out.println(result1);
 
@@ -33,18 +31,9 @@ public class ApplicationFactoryTest {
 		System.out.println(len);
 
 		System.out.print(Thread.currentThread().getId());
-		System.out.println(obj);
 
 		BaseReturn<String> ret2 = demo.save();
-		Object obj2 = ret2.result(new ReturnContext());
-		System.out.print(Thread.currentThread().getId());
-		System.out.println(obj2);
-
-		Object obj3 = ret.result(new ReturnContext("", "8"));
-		System.out.print(Thread.currentThread().getId());
-		System.out.println(obj3);
-
-		System.out.println(" ");
+		System.out.println(ret2.resultDefault());
 	}
 
 	@Test

@@ -13,8 +13,11 @@ public class SpringTest {
 	@Autowired
 	private Application application;
 	
+	@Autowired Application2 application2;
+	
 	@Test
 	public void test(){
 		application.add();
+		application2.add();
 	}
 }

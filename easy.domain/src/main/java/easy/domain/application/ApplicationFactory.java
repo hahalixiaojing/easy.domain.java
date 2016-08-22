@@ -1,52 +1,19 @@
 package easy.domain.application;
 
-import java.util.List;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
-import easy.domain.event.ISubscriber;
 
 public class ApplicationFactory {
 	private static final HashMap<String, IApplication> Application = new HashMap<String, IApplication>();
 
 	private static ApplicationFactory factory;
-	private IReturnTransformerLoader returnTransfomerLoader;
-	private IDomainEventSubscriberLoader domainEventSubscriberLoader;
-	private IDomainEventLoader domainEventLoader;
-	private ApplicationFactory(IReturnTransformerLoader transformerLoader,
-			IDomainEventSubscriberLoader subscriberLoader) {
-		this.returnTransfomerLoader = transformerLoader == null ? new DefaultReturnTransformerLoader()
-				: transformerLoader;
-		this.domainEventSubscriberLoader = subscriberLoader == null ? new DefaultDomainEventSubscriberLoader()
-				: subscriberLoader;
-		this.domainEventLoader =new DefaultDomainEventLoader();
+	private ApplicationBuild build = new ApplicationBuild();
+
+	private ApplicationFactory() {
 	}
 
-	public void register(IApplication application) {
-		BaseApplication baseApplication = (BaseApplication) application;
-
-		HashMap<String, List<IReturnTransformer>> transformers = returnTransfomerLoader
-				.find(baseApplication);
-
-		for (Entry<String, List<IReturnTransformer>> entry : transformers
-				.entrySet()) {
-
-			baseApplication.registerReturnTransformer(entry.getKey(),
-					entry.getValue());
-		}
-
-		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
-				.find(baseApplication);
-		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
-
-			baseApplication.registerSubscriber(entry.getKey(),
-					entry.getValue());
-		}
-		
-		List<Class<?>> domainEvents = this.domainEventLoader.load(baseApplication);
-		baseApplication.registerDomainEvent(domainEvents);
-
-		Application.put(application.getClass().getName(), baseApplication);
+	public void register(BaseApplication application) {
+		build.build(application);
+		Application.put(application.getClass().getName(), application);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -60,21 +27,14 @@ public class ApplicationFactory {
 		return null;
 	}
 
-	public static ApplicationFactory instance(
-			IReturnTransformerLoader transformerLoader,
-			IDomainEventSubscriberLoader subscriberLoader) {
+	public static ApplicationFactory instance() {
 		if (factory == null) {
 			synchronized (ApplicationFactory.class) {
 				if (factory == null) {
-					factory = new ApplicationFactory(transformerLoader,
-							subscriberLoader);
+					factory = new ApplicationFactory();
 				}
 			}
 		}
 		return factory;
-	}
-
-	public static ApplicationFactory instance() {
-		return instance(null, null);
 	}
 }
