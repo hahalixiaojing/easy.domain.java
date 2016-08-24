@@ -10,9 +10,15 @@ public class ApplicationConfig {
 
 	private final ApplicationBuild build = new ApplicationBuild();
 
-	@Bean(name="user1")
+	
+	@Bean(name = "user1")
 	public User getUser() {
 		return new User(100);
+	}
+
+	@Bean
+	public TestService getService() {
+		return new TestService();
 	}
 
 	@Bean(name = "user2")

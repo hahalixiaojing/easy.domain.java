@@ -7,16 +7,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes =ApplicationConfig.class)
+@ContextConfiguration(classes = { ApplicationConfig.class, Datasource.class })
 public class SpringTest {
-	
+
 	@Autowired
 	private Application application;
-	
-	@Autowired Application2 application2;
-	
+
+	@Autowired
+	Application2 application2;
+
 	@Test
-	public void test(){
+	public void test() {
 		application.add();
 		application2.add();
 	}
