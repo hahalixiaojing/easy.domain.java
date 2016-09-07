@@ -14,14 +14,15 @@ import easy.domain.event.ISubscriber;
 public class TaskDomainEventManager implements IDomainEventManager {
 
 	private final HashMap<String, List<ISubscriber>> DOMAIN_EVENTS = new HashMap<>();
-	
-	private List<ISubscriber> domainEvents(String name){
+
+	private List<ISubscriber> domainEvents(String name) {
 		return ObjectUtils.defaultIfNull(this.DOMAIN_EVENTS.get(name),
 				new ArrayList<ISubscriber>(0));
 	}
-	
+
 	@Override
-	public void registerDomainEvent(List<Class<?>> domainEventTypes) {	}
+	public void registerDomainEvent(List<Class<?>> domainEventTypes) {
+	}
 
 	@Override
 	public void registerSubscriber(String name, List<ISubscriber> item) {
@@ -31,8 +32,11 @@ public class TaskDomainEventManager implements IDomainEventManager {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends IDomainEvent> void publishEvent(String name, T obj) {
-		List<ISubscriber> subscribers = this.domainEvents(name);
 
+		System.out.println("xxx=" + name);
+
+		List<ISubscriber> subscribers = this.domainEvents(name);
+		System.out.println("subscribers size = " + subscribers.size());
 		DomainEventPublisher publisher = new DomainEventPublisher();
 		for (ISubscriber sub : subscribers) {
 			publisher.subscribe((IDomainEventSubscriber<T>) sub);

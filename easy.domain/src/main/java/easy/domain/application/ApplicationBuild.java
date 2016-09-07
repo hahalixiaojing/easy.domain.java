@@ -34,7 +34,8 @@ public class ApplicationBuild {
 		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
 				.find(baseApplication);
 		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
-
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
 			baseApplication
 					.registerSubscriber(entry.getKey(), entry.getValue());
 		}

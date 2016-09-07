@@ -31,7 +31,8 @@ public class BaseApplication implements IApplication {
 	public void registerSubscriber(String name, List<ISubscriber> item) {
 		this.manager.registerSubscriber(name, item);
 	}
-	public void registerDomainEvent(List<Class<?>> events){
+
+	public void registerDomainEvent(List<Class<?>> events) {
 		this.manager.registerDomainEvent(events);
 	}
 
@@ -39,7 +40,7 @@ public class BaseApplication implements IApplication {
 		return ObjectUtils.defaultIfNull(this.TRANSFORMER.get(name),
 				new ArrayList<IReturnTransformer>(0));
 	}
-	
+
 	protected <T> BaseReturn<T> write(String mName, T obj) {
 		DefaultReturn<T> ret = new DefaultReturn<T>(obj,
 				this.getTransformer(mName));
@@ -57,6 +58,9 @@ public class BaseApplication implements IApplication {
 	}
 
 	protected <T extends IDomainEvent> void publishEvent(String mName, T obj) {
+
+		System.out.println("publicsh" + mName);
+
 		this.manager.publishEvent(mName, obj);
 	}
 }
