@@ -8,6 +8,7 @@ import easy.domain.base.BrokenRuleObject;
 public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 
 	private HashMap<String, List<RuleItem<T>>> rules;
+	private List<RuleItem<T>> classRules;
 
 	public EntityRule() {
 		this.rules = new HashMap<String, List<RuleItem<T>>>();
@@ -142,20 +143,38 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 		}
 	}
 
+	/**
+	 * 添加自定义规则
+	 * 
+	 * @param rule
+	 * @param messageKey
+	 */
+	public void addRule(IRule<T> rule, String messageKey) {
+		this.classRules.add(new RuleItem<T>(rule, messageKey));
+	}
+
 	@Override
 	public boolean isSatisfy(T model) {
-		boolean isAllOk = true;
+		boolean propertyIsValid = true;
 		for (Entry<String, List<RuleItem<T>>> entry : this.rules.entrySet()) {
 			for (RuleItem<T> rule : entry.getValue()) {
 				if (!rule.getRule().isSatisfy(model)) {
-					isAllOk = false;
+					propertyIsValid = false;
 					model.addBrokenRule(rule.getMessageKey(), entry.getKey());
 					break;
 				}
-
 			}
 		}
-		return isAllOk;
-	}
 
+		boolean classIsValid = true;
+		for (RuleItem<T> rule : this.classRules) {
+
+			if (!rule.getRule().isSatisfy(model)) {
+				classIsValid = false;
+				model.addBrokenRule(rule.getMessageKey());
+				break;
+			}
+		}
+		return propertyIsValid && classIsValid;
+	}
 }
