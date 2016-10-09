@@ -48,7 +48,7 @@ public class DefaultDomainEventLoader implements IDomainEventLoader {
 
 		for (Method m : acMethods) {
 			String domainEventsPath = path + "/" + m.getName()
-					+ "domainevents/";
+					+ "events/";
 
 			URL url = this.getUrls(domainEventsPath.toLowerCase());
 
