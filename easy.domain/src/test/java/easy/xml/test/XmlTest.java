@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalInt;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.BooleanUtils;
@@ -87,30 +86,6 @@ public class XmlTest {
 		result = Boolean.parseBoolean("true");
 		Assert.assertTrue(result);
 	}
-
-	@Test
-	public void lambdaTest() throws Exception {
-		@SuppressWarnings("unchecked")
-		Callable<String>[] callableArray = new Callable[] {
-				() -> "Hello world 1", () -> "Hello world2" };
-		for (Callable<String> c : callableArray) {
-			System.out.println(c.call());
-		}
-
-		ConstClass constCls = new ConstClass(ArrayList<String>::new);
-
-		constCls.toString();
-
-		int[] intArray = new int[] { 1, 2, 3 };
-
-		OptionalInt result = Arrays.stream(intArray).reduce(Integer::sum);
-
-		if (result.isPresent()) {
-			System.out.println(result.getAsInt());
-		}
-
-	}
-
 	@Test
 	public void test2(){
 		String path = "com/demo/application/product/models/ToViewProductModel.class";

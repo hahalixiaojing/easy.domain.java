@@ -32,9 +32,6 @@ public class EntityRuleTest {
 
 		int size = user.getBrokenRules().size();
 		Assert.assertEquals(2, size);
-
-		user.getBrokenRules().stream()
-				.forEach(s -> System.out.println(s.getProperty()));
 	}
 
 	/**

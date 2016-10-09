@@ -1,13 +1,13 @@
 package easy.domain.event.test;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import easy.domain.event.IDomainEvent;
 
 public class DataModel implements IDomainEvent {
 	private String url;
 
-	public DataModel(LocalDate oDate, String url) {
+	public DataModel(Date oDate, String url) {
 		this.url = url;
 	}
 

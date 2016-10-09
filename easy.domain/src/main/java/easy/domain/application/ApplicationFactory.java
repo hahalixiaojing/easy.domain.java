@@ -11,7 +11,7 @@ public class ApplicationFactory {
 	private ApplicationFactory() {
 	}
 
-	public void register(BaseApplication application) {
+	public void register(BaseApplication application) throws Exception {
 		build.build(application);
 		Application.put(application.getClass().getName(), application);
 	}

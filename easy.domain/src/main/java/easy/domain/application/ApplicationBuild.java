@@ -18,7 +18,7 @@ public class ApplicationBuild {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T extends BaseApplication> T build(T application){
+	public <T extends BaseApplication> T build(T application) throws Exception{
 		BaseApplication baseApplication = (BaseApplication) application;
 
 		HashMap<String, List<IReturnTransformer>> transformers = returnTransfomerLoader

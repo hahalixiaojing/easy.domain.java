@@ -5,11 +5,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import easy.domain.application.*;
+import easy.domain.application.test.demo.DemoApplication;
 
 public class ApplicationFactoryTest {
 
 	@BeforeClass
-	public static void setUp() {
+	public static void setUp() throws Exception {
 		ApplicationFactory.instance().register(new DemoApplication());
 	}
 
@@ -23,9 +24,12 @@ public class ApplicationFactoryTest {
 		String result1 = ret.resultDefault();
 		System.out.println(result1);
 
-		int len = ret.resultToConvert((s) -> {
+		int len = ret.result(new IDefaultReturnTansformer<String,Integer>() {
 
-			return s.length();
+			@Override
+			public Integer getValue(String t) {
+				return t.length();
+			}
 		});
 
 		System.out.println(len);

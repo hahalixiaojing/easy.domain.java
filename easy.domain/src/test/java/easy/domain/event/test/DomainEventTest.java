@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class DomainEventTest {
 			};
 		});
 
-		publisher.publish(new DataModel(java.time.LocalDate.now(), "http://www.baidu.com"));
+		publisher.publish(new DataModel(new Date(), "http://www.baidu.com"));
 
 		try {
 			Thread.sleep(10000);

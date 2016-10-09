@@ -1,4 +1,4 @@
-package easy.domain.application.test.demo.savedomainevents;
+package easy.domain.application.test.demo.saveevents;
 
 
 import easy.domain.event.IDomainEvent;

@@ -1,9 +1,9 @@
-package easy.domain.application.test;
+package easy.domain.application.test.demo;
 
 import easy.domain.application.BaseApplication;
 import easy.domain.application.BaseReturn;
-import easy.domain.application.test.demo.adddomainevents.DemoDomainEvent;
-import easy.domain.application.test.demo.savedomainevents.SaveDemoDomainEvent;
+import easy.domain.application.test.demo.addevents.DemoDomainEvent;
+import easy.domain.application.test.demo.saveevents.SaveDemoDomainEvent;
 
 public class DemoApplication extends BaseApplication {
 	public BaseReturn<String> add(){

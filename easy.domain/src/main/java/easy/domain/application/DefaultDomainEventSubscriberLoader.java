@@ -6,15 +6,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import easy.domain.event.ISubscriber;
@@ -31,25 +29,31 @@ public class DefaultDomainEventSubscriberLoader implements
 	@Override
 	public HashMap<String, List<ISubscriber>> find(IApplication application) {
 
-		Stream<Method> methods = Arrays.stream(
-				application.getClass().getMethods()).filter(
-				m -> Modifier.isPublic(m.getModifiers())
-						&& !Modifier.isAbstract(m.getModifiers())
-						&& !Arrays.stream(excluecMethths).anyMatch(
-								s -> s.equals(m.getName())));
+		Method[] methods = application.getClass().getMethods();
 
-		String packagename = application.getClass().getName()
-				.substring(0, application.getClass().getName().length() - 11);
+		List<Method> sMethods = new ArrayList<Method>();
+
+		for (Method m : methods) {
+
+			if (Modifier.isPublic(m.getModifiers())
+					&& !Modifier.isAbstract(m.getModifiers())
+					&& !ArrayUtils.contains(excluecMethths, m.getName())) {
+
+				sMethods.add(m);
+			}
+		}
+		String packagename = application
+				.getClass()
+				.getName()
+				.substring(0, application.getClass().getName().lastIndexOf('.'));
 
 		String path = packagename.replace('.', '/');
 
 		HashMap<String, List<ISubscriber>> hashMap = new HashMap<>();
 
-		List<Method> methodList = methods.collect(Collectors.toList());
-		for (Method m : methodList) {
+		for (Method m : sMethods) {
 
-			String domainEventsPath = path + "/" + m.getName()
-					+ "domainevents/";
+			String domainEventsPath = path + "/" + m.getName() + "events/";
 
 			URL url = this.getUrls(domainEventsPath.toLowerCase());
 
@@ -112,10 +116,17 @@ public class DefaultDomainEventSubscriberLoader implements
 		File file = new File(url.getFile());
 		String[] files = file.list();
 
-		return Arrays.stream(files)
-				.map(m -> packageName + m.substring(0, m.length() - 6))
-				.map(this::subscriberObject).filter(m -> m != null)
-				.collect(Collectors.toList());
+		List<ISubscriber> subscribers = new ArrayList<ISubscriber>();
+		for (String f : files) {
+
+			String classpath = packageName + f.substring(0, f.length() - 6);
+
+			ISubscriber subscriber = this.subscriberObject(classpath);
+			if (subscriber != null) {
+				subscribers.add(subscriber);
+			}
+		}
+		return subscribers;
 	}
 
 	private ISubscriber subscriberObject(String classpath) {

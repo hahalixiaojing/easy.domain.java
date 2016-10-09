@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import easy.domain.application.DefaultDomainEventSubscriberLoader;
+import easy.domain.application.test.demo.DemoApplication;
 import easy.domain.event.ISubscriber;
 
 public class DefaultDomainEventSubscriberLoaderTest {

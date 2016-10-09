@@ -6,13 +6,13 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,21 +24,28 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 	@Override
 	public HashMap<String, List<IReturnTransformer>> find(
 			IApplication application) {
-		List<Method> methods = Arrays
-				.stream(application.getClass().getMethods())
-				.filter(m -> m.getReturnType() == IReturn.class
-						&& Modifier.isPublic(m.getModifiers())
-						&& !Modifier.isAbstract(m.getModifiers()))
-				.collect(Collectors.toList());
+
+		Method[] methods = application.getClass().getMethods();
+
+		List<Method> rMethods = new ArrayList<Method>();
+		for (Method m : methods) {
+
+			if (Modifier.isPublic(m.getModifiers())
+					&& !Modifier.isAbstract(m.getModifiers())
+					&& IReturn.class.isAssignableFrom(m.getReturnType())) {
+
+				rMethods.add(m);
+			}
+		}
 
 		String packagename = application.getClass().getName()
-				.substring(0, application.getClass().getName().length() - 11);
+				.substring(0, application.getClass().getName().lastIndexOf('.'));
 
 		String path = packagename.replace('.', '/');
 
 		HashMap<String, List<IReturnTransformer>> hashMap = new HashMap<>();
 
-		for (Method m : methods) {
+		for (Method m : rMethods) {
 			System.out.println(m.getName());
 			String transformerPath = path + "/" + m.getName();
 
@@ -129,10 +136,24 @@ public class DefaultReturnTransformerLoader implements IReturnTransformerLoader 
 		File file = new File(url.getFile());
 		String[] files = file.list();
 
-		return Arrays.stream(files)
-				.map(m -> packageName + "." + m.substring(0, m.length() - 6))
-				.map(this::returnTransformer).filter(m -> m != null)
-				.sorted((a, b) -> b.getOrder() - a.getOrder())
-				.collect(Collectors.toList());
+		List<IReturnTransformer> transformers = new ArrayList<>();
+		for (String f : files) {
+
+			String classpath = packageName + "."
+					+ f.substring(0, f.length() - 6);
+
+			IReturnTransformer t = this.returnTransformer(classpath);
+			if (t != null) {
+				transformers.add(t);
+			}
+		}
+
+		Collections.sort(transformers, new Comparator<IReturnTransformer>() {
+			@Override
+			public int compare(IReturnTransformer a, IReturnTransformer b) {
+				return b.getOrder() - a.getOrder();
+			}
+		});
+		return transformers;
 	}
 }

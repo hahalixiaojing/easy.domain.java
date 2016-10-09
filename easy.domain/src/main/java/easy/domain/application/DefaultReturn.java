@@ -1,8 +1,6 @@
 package easy.domain.application;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 
 public class DefaultReturn<T> extends BaseReturn<T> {
 	private T obj;
@@ -16,14 +14,12 @@ public class DefaultReturn<T> extends BaseReturn<T> {
 	@Override
 	public Object result(ReturnContext context) throws Exception {
 
-		Optional<IReturnTransformer> result = this.transformer.stream()
-				.filter(m -> m.isMapped(context)).findFirst();
+		for (IReturnTransformer trans : transformer) {
 
-		if (result.isPresent()) {
-
-			return result.get().getValue(context, obj);
+			if (trans.isMapped(context)) {
+				return trans.getValue(context, obj);
+			}
 		}
-		
 		return noFound.getValue(context, obj);
 	}
 
@@ -31,10 +27,8 @@ public class DefaultReturn<T> extends BaseReturn<T> {
 	public T resultDefault() throws Exception {
 		return this.obj;
 	}
-
 	@Override
-	public <R> R resultToConvert(Function<T, R> func) throws Exception {
-		return func.apply(this.obj);
+	public <R> R result(IDefaultReturnTansformer<T, R> transformer) {
+		return transformer.getValue(this.obj);
 	}
-	
 }

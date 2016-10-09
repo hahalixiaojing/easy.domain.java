@@ -12,6 +12,8 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 
 	public EntityRule() {
 		this.rules = new HashMap<String, List<RuleItem<T>>>();
+		this.classRules = new ArrayList<RuleItem<T>>();
+		
 
 	}
 
