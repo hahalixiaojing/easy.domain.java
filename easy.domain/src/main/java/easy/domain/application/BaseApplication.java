@@ -8,6 +8,7 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import easy.domain.event.IDomainEvent;
 import easy.domain.event.ISubscriber;
+import easy.domain.event.TaskDomainEventManager;
 
 public class BaseApplication implements IApplication {
 
