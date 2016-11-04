@@ -26,7 +26,7 @@ public class TaskDomainEventManager implements IDomainEventManager {
 	}
 
 	@Override
-	public void registerSubscriber(String name, List<ISubscriber> item) {
+	public void registerSubscriber( List<ISubscriber> item) {
 
 		if (item.size() > 0) {
 			String eventName = item.get(0).suscribedToEventType().getName();
@@ -37,7 +37,7 @@ public class TaskDomainEventManager implements IDomainEventManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IDomainEvent> void publishEvent(String name, T obj) {
+	public <T extends IDomainEvent> void publishEvent( T obj) {
 
 		List<ISubscriber> subscribers = this.domainEvents(obj.getClass()
 				.getName());

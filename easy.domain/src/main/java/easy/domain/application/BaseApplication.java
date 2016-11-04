@@ -29,8 +29,8 @@ public class BaseApplication implements IApplication {
 		this.TRANSFORMER.put(name, transformer);
 	}
 
-	public void registerSubscriber(String name, List<ISubscriber> item) {
-		this.manager.registerSubscriber(name, item);
+	public void registerSubscriber(List<ISubscriber> item) {
+		this.manager.registerSubscriber(item);
 	}
 
 	public void registerDomainEvent(List<Class<?>> events) {
@@ -51,17 +51,14 @@ public class BaseApplication implements IApplication {
 	protected <T, EventDATA extends IDomainEvent> BaseReturn<T> writeAndPublishDomainEvent(
 			String mName, T obj, EventDATA eventData) {
 		try {
-			this.publishEvent(mName, eventData);
+			this.publishEvent(eventData);
 		} finally {
 		}
 
 		return this.write(mName, obj);
 	}
 
-	protected <T extends IDomainEvent> void publishEvent(String mName, T obj) {
-
-		System.out.println("publicsh" + mName);
-
-		this.manager.publishEvent(mName, obj);
+	protected <T extends IDomainEvent> void publishEvent(T obj) {
+		this.manager.publishEvent(obj);
 	}
 }

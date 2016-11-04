@@ -16,9 +16,9 @@ public class ApplicationBuild {
 		this.domainEventSubscriberLoader = new DefaultDomainEventSubscriberLoader();
 		this.domainEventLoader = new DefaultDomainEventLoader();
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public <T extends BaseApplication> T build(T application) throws Exception{
+	public <T extends BaseApplication> T build(T application) throws Exception {
 		BaseApplication baseApplication = (BaseApplication) application;
 
 		HashMap<String, List<IReturnTransformer>> transformers = returnTransfomerLoader
@@ -34,16 +34,13 @@ public class ApplicationBuild {
 		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
 				.find(baseApplication);
 		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
-			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
-			baseApplication
-					.registerSubscriber(entry.getKey(), entry.getValue());
+			baseApplication.registerSubscriber(entry.getValue());
 		}
 
 		List<Class<?>> domainEvents = this.domainEventLoader
 				.load(baseApplication);
 		baseApplication.registerDomainEvent(domainEvents);
-		
+
 		return (T) baseApplication;
 	}
 }
