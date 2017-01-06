@@ -33,7 +33,7 @@ public class TaskDomainEventManager implements IDomainEventManager {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IDomainEvent> void publishEvent(T obj) {
+	public <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
 
 		List<ISubscriber> subscribers = this.domainEvents(obj.getClass()
 				.getName());

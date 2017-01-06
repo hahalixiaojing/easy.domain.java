@@ -8,5 +8,5 @@ import easy.domain.event.ISubscriber;
 public interface IDomainEventManager {
 	void registerDomainEvent(List<Class<?>> domainEventTypes);
 	void registerSubscriber(List<ISubscriber> items);
-	<T extends IDomainEvent> void publishEvent(T obj);
+	<T extends IDomainEvent> void publishEvent(T obj) throws Exception;
 }
