@@ -6,11 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-import easy.domain.application.IDomainEventManager;
-import easy.domain.event.DomainEventPublisher;
-import easy.domain.event.IDomainEvent;
-import easy.domain.event.IDomainEventSubscriber;
-import easy.domain.event.ISubscriber;
+import easy.domain.application.subscriber.IDomainEventManager;
 
 public class TaskDomainEventManager implements IDomainEventManager {
 

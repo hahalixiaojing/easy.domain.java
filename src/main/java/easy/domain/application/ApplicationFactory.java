@@ -6,7 +6,7 @@ public class ApplicationFactory {
 	private static final HashMap<String, IApplication> Application = new HashMap<String, IApplication>();
 
 	private static ApplicationFactory factory;
-	private ApplicationBuild build = new ApplicationBuild();
+	private ApplicationBuilder build = new ApplicationBuilder();
 
 	private ApplicationFactory() {
 	}

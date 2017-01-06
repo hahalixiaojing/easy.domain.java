@@ -1,4 +1,6 @@
-package easy.domain.application;
+package easy.domain.application.subscriber;
+
+import easy.domain.application.IApplication;
 
 import java.util.List;
 

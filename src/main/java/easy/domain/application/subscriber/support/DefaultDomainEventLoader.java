@@ -1,4 +1,4 @@
-package easy.domain.application;
+package easy.domain.application.subscriber.support;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,41 +7,40 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import easy.domain.application.IApplication;
+import easy.domain.application.subscriber.IDomainEventLoader;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import easy.domain.event.ISubscriber;
+import easy.domain.event.IDomainEvent;
 import easy.domain.utils.JarPathHelper;
 
-public class DefaultDomainEventSubscriberLoader implements
-		IDomainEventSubscriberLoader {
-
+public class DefaultDomainEventLoader implements IDomainEventLoader {
 	private ClassLoader cl = getClass().getClassLoader();
-
 	private String[] excluecMethths = { "notifyAll", "notify", "getClass",
 			"hashCode", "equals", "wait", "toString" };
 
 	@Override
-	public HashMap<String, List<ISubscriber>> find(IApplication application) {
+	public List<Class<?>> load(IApplication application)
+			throws ClassNotFoundException {
 
 		Method[] methods = application.getClass().getMethods();
 
-		List<Method> sMethods = new ArrayList<Method>();
-
+		List<Method> acMethods = new ArrayList<Method>();
 		for (Method m : methods) {
 
 			if (Modifier.isPublic(m.getModifiers())
 					&& !Modifier.isAbstract(m.getModifiers())
 					&& !ArrayUtils.contains(excluecMethths, m.getName())) {
 
-				sMethods.add(m);
+				acMethods.add(m);
 			}
 		}
+
 		String packagename = application
 				.getClass()
 				.getName()
@@ -49,41 +48,32 @@ public class DefaultDomainEventSubscriberLoader implements
 
 		String path = packagename.replace('.', '/');
 
-		HashMap<String, List<ISubscriber>> hashMap = new HashMap<>();
-
-		for (Method m : sMethods) {
-
-			String domainEventsPath = path + "/" + m.getName() + "events/";
+		for (Method m : acMethods) {
+			String domainEventsPath = path + "/" + m.getName()
+					+ "events/";
 
 			URL url = this.getUrls(domainEventsPath.toLowerCase());
 
 			if (url == null) {
-				hashMap.put(m.getName(), new ArrayList<ISubscriber>(0));
-				continue;
+				return new ArrayList<Class<?>>(0);
 			}
 
-			List<ISubscriber> subscribers = null;
 			if (url.getProtocol().equals("file")) {
-				subscribers = this.subscribersFromClasses(domainEventsPath
-						.replace('/', '.').toLowerCase(), url);
+				return this.subscribersFromClasses(
+						domainEventsPath.replace('/', '.').toLowerCase(), url);
 
 			} else if (url.getProtocol().equals("jar")) {
-
 				String jarfilePath = JarPathHelper.jarPath(url.getFile());
-				subscribers = this.subscribersFromJar(jarfilePath,
+				return this.subscribersFromJar(jarfilePath,
 						domainEventsPath.toLowerCase());
 			}
-
-			hashMap.put(m.getName(), subscribers);
 		}
-
-		return hashMap;
+		return new ArrayList<Class<?>>(0);
 	}
 
-	private List<ISubscriber> subscribersFromJar(String jarfile,
-			String packageName) {
+	private List<Class<?>> subscribersFromJar(String jarfile, String packageName) {
 
-		ArrayList<ISubscriber> arrayList = new ArrayList<ISubscriber>();
+		ArrayList<Class<?>> arrayList = new ArrayList<>();
 
 		try (JarFile jar = new JarFile(new File(jarfile))) {
 
@@ -99,48 +89,36 @@ public class DefaultDomainEventSubscriberLoader implements
 				String classpath = StringUtils.remove(jarEntry.getName()
 						.replace('/', '.'), ".class");
 
-				ISubscriber subscriber = this.subscriberObject(classpath);
-				if (subscriber != null) {
-					arrayList.add(subscriber);
+				Class<?> cls = Class.forName(classpath);
+
+				if (IDomainEvent.class.isAssignableFrom(cls)) {
+					arrayList.add(cls);
 				}
 			}
 
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return arrayList;
 	}
 
-	private List<ISubscriber> subscribersFromClasses(String packageName, URL url) {
+	private List<Class<?>> subscribersFromClasses(String packageName, URL url)
+			throws ClassNotFoundException {
 
 		File file = new File(url.getFile());
 		String[] files = file.list();
 
-		List<ISubscriber> subscribers = new ArrayList<ISubscriber>();
+		List<Class<?>> clsList = new ArrayList<Class<?>>();
 		for (String f : files) {
 
 			String classpath = packageName + f.substring(0, f.length() - 6);
-
-			ISubscriber subscriber = this.subscriberObject(classpath);
-			if (subscriber != null) {
-				subscribers.add(subscriber);
-			}
-		}
-		return subscribers;
-	}
-
-	private ISubscriber subscriberObject(String classpath) {
-		try {
 			Class<?> cls = Class.forName(classpath);
 
-			boolean result = ISubscriber.class.isAssignableFrom(cls);
-			if (result) {
-				return (ISubscriber) cls.newInstance();
+			if (IDomainEvent.class.isAssignableFrom(cls)) {
+				clsList.add(cls);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		return null;
+		return clsList;
 	}
 
 	private URL getUrls(String path) {

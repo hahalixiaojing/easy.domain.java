@@ -4,15 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import easy.domain.application.subscriber.support.DefaultDomainEventLoader;
+import easy.domain.application.subscriber.support.DefaultDomainEventSubscriberLoader;
+import easy.domain.application.subscriber.IDomainEventLoader;
+import easy.domain.application.subscriber.IDomainEventSubscriberLoader;
 import easy.domain.event.ISubscriber;
 
-public class ApplicationBuild {
-	private IReturnTransformerLoader returnTransfomerLoader;
+public class ApplicationBuilder {
 	private IDomainEventSubscriberLoader domainEventSubscriberLoader;
 	private IDomainEventLoader domainEventLoader;
 
-	public ApplicationBuild() {
-		this.returnTransfomerLoader = new DefaultReturnTransformerLoader();
+	public ApplicationBuilder() {
 		this.domainEventSubscriberLoader = new DefaultDomainEventSubscriberLoader();
 		this.domainEventLoader = new DefaultDomainEventLoader();
 	}
@@ -21,15 +23,6 @@ public class ApplicationBuild {
 	public <T extends BaseApplication> T build(T application) throws Exception {
 		BaseApplication baseApplication = (BaseApplication) application;
 
-		HashMap<String, List<IReturnTransformer>> transformers = returnTransfomerLoader
-				.find(baseApplication);
-
-		for (Entry<String, List<IReturnTransformer>> entry : transformers
-				.entrySet()) {
-
-			baseApplication.registerReturnTransformer(entry.getKey(),
-					entry.getValue());
-		}
 
 		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
 				.find(baseApplication);
