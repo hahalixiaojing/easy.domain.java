@@ -9,6 +9,7 @@ import easy.domain.application.subscriber.IDomainEventManager;
 import easy.domain.event.IDomainEvent;
 import easy.domain.event.ISubscriber;
 import easy.domain.event.TaskDomainEventManager;
+import jdk.nashorn.internal.ir.CatchNode;
 
 public abstract class BaseApplication implements IApplication {
 
@@ -31,7 +32,6 @@ public abstract class BaseApplication implements IApplication {
     }
 
 
-
     protected <T> IBaseResult<T> write(T obj) {
         Result<T> result = new Result<>(obj);
         return result;
@@ -41,13 +41,16 @@ public abstract class BaseApplication implements IApplication {
             T obj, EventDATA eventData) {
         try {
             this.publishEvent(eventData);
+
+        } catch (Exception e) {
+
         } finally {
         }
 
         return this.write(obj);
     }
 
-    protected <T extends IDomainEvent> void publishEvent(T obj) {
+    protected <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
         this.manager.publishEvent(obj);
     }
 }

@@ -10,38 +10,21 @@ import easy.domain.application.subscriber.IDomainEventManager;
 
 public class TaskDomainEventManager implements IDomainEventManager {
 
-	private final HashMap<String, List<ISubscriber>> DOMAIN_EVENTS = new HashMap<>();
+    private final List<ISubscriber> subscribers = new ArrayList<>();
+    private final DomainEventPublisher publisher = new DomainEventPublisher();
 
-	private List<ISubscriber> domainEvents(String name) {
-		return ObjectUtils.defaultIfNull(this.DOMAIN_EVENTS.get(name),
-				new ArrayList<ISubscriber>(0));
-	}
+    @Override
+    public void registerDomainEvent(List<Class<?>> domainEventTypes) {
+    }
 
-	@Override
-	public void registerDomainEvent(List<Class<?>> domainEventTypes) {
-	}
+    @Override
+    public void registerSubscriber(List<ISubscriber> item) {
+        this.subscribers.addAll(item);
+    }
 
-	@Override
-	public void registerSubscriber(List<ISubscriber> item) {
-
-		if (item.size() > 0) {
-			String eventName = item.get(0).suscribedToEventType().getName();
-			this.DOMAIN_EVENTS.put(eventName, item);
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
-
-		List<ISubscriber> subscribers = this.domainEvents(obj.getClass()
-				.getName());
-		DomainEventPublisher publisher = new DomainEventPublisher();
-		for (ISubscriber sub : subscribers) {
-			publisher.subscribe((IDomainEventSubscriber<T>) sub);
-		}
-
-		publisher.publish(obj);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
+        publisher.publish(obj, subscribers);
+    }
 }
