@@ -14,8 +14,9 @@ public class UpdateEsSubscriber implements IDomainEventSubscriber<TestDomainEven
 
     }
 
+
     @Override
-    public Class<?> suscribedToEventType() {
+    public Class<?> subscribedToEventType() {
         return TestDomainEvent.class;
     }
 }

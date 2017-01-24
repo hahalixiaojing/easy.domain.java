@@ -25,7 +25,7 @@ public class DomainEventPublisher {
         for (ISubscriber sub : subscribers) {
             IDomainEventSubscriber<T> subscribedTo = (IDomainEventSubscriber<T>) sub;
 
-            if (subscribedTo != null && subscribedTo.suscribedToEventType() == aDomainEvent.getClass()) {
+            if (subscribedTo != null && subscribedTo.subscribedToEventType() == aDomainEvent.getClass()) {
                 Task<T> task = new Task<T>(subscribedTo, aDomainEvent);
                 pool.execute(task);
             }

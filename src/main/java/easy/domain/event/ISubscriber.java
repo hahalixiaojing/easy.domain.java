@@ -6,5 +6,5 @@ public interface ISubscriber {
      *
      * @return
      */
-    Class<?> suscribedToEventType();
+    Class<?> subscribedToEventType();
 }
