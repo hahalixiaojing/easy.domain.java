@@ -14,4 +14,9 @@ public class DataModel implements IDomainEvent {
 	public String Url() {
 		return this.url;
 	}
+
+	@Override
+	public String getBusinessId() {
+		return null;
+	}
 }

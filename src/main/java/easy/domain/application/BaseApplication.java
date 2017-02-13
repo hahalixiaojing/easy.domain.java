@@ -9,7 +9,6 @@ import easy.domain.application.subscriber.IDomainEventManager;
 import easy.domain.event.IDomainEvent;
 import easy.domain.event.ISubscriber;
 import easy.domain.event.TaskDomainEventManager;
-import jdk.nashorn.internal.ir.CatchNode;
 
 public abstract class BaseApplication implements IApplication {
 
@@ -23,11 +22,11 @@ public abstract class BaseApplication implements IApplication {
         this.manager = manager;
     }
 
-    public void registerSubscriber(List<ISubscriber> item) {
+    public void registerSubscriber(List<ISubscriber> item) throws Exception {
         this.manager.registerSubscriber(item);
     }
 
-    public void registerDomainEvent(List<Class<?>> events) {
+    public void registerDomainEvent(List<Class<?>> events) throws Exception {
         this.manager.registerDomainEvent(events);
     }
 

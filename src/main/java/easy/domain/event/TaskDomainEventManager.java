@@ -13,6 +13,7 @@ public class TaskDomainEventManager implements IDomainEventManager {
     private final List<ISubscriber> subscribers = new ArrayList<>();
     private final DomainEventPublisher publisher = new DomainEventPublisher();
 
+
     @Override
     public void registerDomainEvent(List<Class<?>> domainEventTypes) {
     }

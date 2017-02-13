@@ -8,4 +8,9 @@ import easy.domain.event.IDomainEvent;
 public class TestDomainEvent implements IDomainEvent {
     public long orderId;
     public long userId;
+
+    @Override
+    public String getBusinessId() {
+        return null;
+    }
 }
