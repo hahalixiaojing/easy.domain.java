@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -75,10 +76,10 @@ public class ApplicationReturnTest {
     public void test3() throws Exception {
         TestApplication testApplication = new TestApplication();
 
-        List<Class<?>> domainEvents = new ArrayList<>();
+        HashSet<Class<?>> domainEvents = new HashSet<>();
         domainEvents.add(TestDomainEvent.class);
 
-        List<ISubscriber> subscribers = new ArrayList<>();
+        HashSet<ISubscriber> subscribers = new HashSet<>();
         subscribers.add(new UpdateEsSubscriber());
 
         testApplication.registerDomainEvent(domainEvents);

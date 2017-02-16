@@ -1,6 +1,7 @@
 package easy.domain.application;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -27,12 +28,12 @@ public class ApplicationBuilder {
 		HashMap<String, List<ISubscriber>> subscribers = domainEventSubscriberLoader
 				.find(baseApplication);
 		for (Entry<String, List<ISubscriber>> entry : subscribers.entrySet()) {
-			baseApplication.registerSubscriber(entry.getValue());
+			baseApplication.registerSubscriber(new HashSet<>(entry.getValue()));
 		}
 
 		List<Class<?>> domainEvents = this.domainEventLoader
 				.load(baseApplication);
-		baseApplication.registerDomainEvent(domainEvents);
+		baseApplication.registerDomainEvent(new HashSet<>(domainEvents));
 
 		return (T) baseApplication;
 	}

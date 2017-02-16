@@ -3,6 +3,7 @@ package easy.domain.event;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -15,11 +16,11 @@ public class TaskDomainEventManager implements IDomainEventManager {
 
 
     @Override
-    public void registerDomainEvent(List<Class<?>> domainEventTypes) {
+    public void registerDomainEvent(Set<Class<?>> domainEventTypes) {
     }
 
     @Override
-    public void registerSubscriber(List<ISubscriber> item) {
+    public void registerSubscriber(Set<ISubscriber> item) {
         this.subscribers.addAll(item);
     }
 

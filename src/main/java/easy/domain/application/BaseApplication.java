@@ -1,6 +1,6 @@
 package easy.domain.application;
 
-import java.util.List;
+import java.util.Set;
 
 import easy.domain.application.result.IBaseResult;
 import easy.domain.application.result.support.Result;
@@ -22,11 +22,11 @@ public abstract class BaseApplication implements IApplication {
         this.manager = manager;
     }
 
-    public void registerSubscriber(List<ISubscriber> item) throws Exception {
+    public void registerSubscriber(Set<ISubscriber> item) throws Exception {
         this.manager.registerSubscriber(item);
     }
 
-    public void registerDomainEvent(List<Class<?>> events) throws Exception {
+    public void registerDomainEvent(Set<Class<?>> events) throws Exception {
         this.manager.registerDomainEvent(events);
     }
 
