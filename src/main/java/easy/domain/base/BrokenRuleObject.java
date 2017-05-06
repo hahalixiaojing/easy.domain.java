@@ -6,8 +6,8 @@ import java.util.List;
 
 public abstract class BrokenRuleObject {
 
-	private List<BrokenRule> brokenRules;
-	private BrokenRuleMessage brokenRuleMessage;
+	private transient List<BrokenRule> brokenRules;
+	private transient BrokenRuleMessage brokenRuleMessage;
 	
     private static EmptyBrokenRule emptyBrokenRule = new EmptyBrokenRule();
 

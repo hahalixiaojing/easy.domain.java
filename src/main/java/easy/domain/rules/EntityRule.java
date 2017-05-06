@@ -11,8 +11,8 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	private List<RuleItem<T>> classRules;
 
 	public EntityRule() {
-		this.rules = new HashMap<String, List<RuleItem<T>>>();
-		this.classRules = new ArrayList<RuleItem<T>>();
+		this.rules = new HashMap<>();
+		this.classRules = new ArrayList<>();
 		
 
 	}
@@ -117,7 +117,6 @@ public class EntityRule<T extends BrokenRuleObject> implements IRule<T> {
 	 * 数字应该 等于
 	 * 
 	 * @param property
-	 * @param bool
 	 * @param messageKey
 	 */
 	public <Value extends Number> void numberShouldEqual(String property,
