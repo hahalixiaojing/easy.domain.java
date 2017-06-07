@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://www.39541240.com/services">
-	<service implementation="easy.domain.service.framework.test.DemoService"
-		interface="easy.domain.service.framework.test.IDemoService" />
-</services>

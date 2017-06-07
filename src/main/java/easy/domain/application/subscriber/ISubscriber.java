@@ -1,4 +1,4 @@
-package easy.domain.event;
+package easy.domain.application.subscriber;
 
 public interface ISubscriber {
     /**

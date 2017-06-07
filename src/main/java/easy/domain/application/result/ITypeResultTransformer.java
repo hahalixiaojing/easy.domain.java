@@ -1,9 +1,9 @@
 package easy.domain.application.result;
 
 
-public interface ITypeResultTransformer<T> {
+public interface ITypeResultTransformer<T>  {
 
-    boolean fitlerType(Class<?> rClass) throws Exception;
+    boolean fitlerType(Class<?> rClass);
 
-    <R> R getValue(T value) throws Exception;
+    <R> R getValue(T value);
 }

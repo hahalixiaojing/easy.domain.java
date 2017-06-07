@@ -1,4 +1,6 @@
-package easy.domain.event;
+package easy.domain.application.subscriber;
+
+import easy.domain.event.IDomainEvent;
 
 /**
  * 事件订阅接口

@@ -15,17 +15,17 @@ public class Result<T> implements IBaseResult<T> {
 
 
     @Override
-    public T result() throws Exception {
+    public T result() {
         return value;
     }
 
     @Override
-    public <R> R result(IResultTransformer<T, R> transformer) throws Exception {
+    public <R> R result(IResultTransformer<T, R> transformer) {
         return transformer.getValue(this.value);
     }
 
     @Override
-    public <R> R result(List<ITypeResultTransformer<T>> transformers, Class<R> rClass) throws Exception {
+    public <R> R result(List<ITypeResultTransformer<T>> transformers, Class<R> rClass)  {
 
         for (ITypeResultTransformer<T> transformer : transformers) {
             if (transformer.fitlerType(rClass)) {

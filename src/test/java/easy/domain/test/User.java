@@ -66,7 +66,6 @@ public class User extends BaseUser {
 
 	@Override
 	public Boolean validate() {
-		// TODO Auto-generated method stub
-		return null;
+		return new UserEntityRule().isSatisfy(this);
 	}
 }

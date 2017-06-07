@@ -1,6 +1,8 @@
 package easy.domain.event;
 
-import java.util.ArrayList;
+import easy.domain.application.subscriber.IDomainEventSubscriber;
+import easy.domain.application.subscriber.ISubscriber;
+
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -8,11 +10,12 @@ import java.util.concurrent.*;
  * 事件发布器
  */
 public class DomainEventPublisher {
-    private static final ExecutorService pool;
+    private static final ThreadPoolExecutor pool;
 
     static {
 
-        pool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
+
     }
 
     /**
@@ -28,6 +31,7 @@ public class DomainEventPublisher {
             if (subscribedTo != null && subscribedTo.subscribedToEventType() == aDomainEvent.getClass()) {
                 Task<T> task = new Task<T>(subscribedTo, aDomainEvent);
                 pool.execute(task);
+                System.out.println("task count=" + pool.getTaskCount());
             }
         }
     }

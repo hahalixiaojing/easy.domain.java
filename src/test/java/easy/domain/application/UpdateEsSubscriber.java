@@ -1,7 +1,6 @@
 package easy.domain.application;
 
-import easy.domain.event.IDomainEvent;
-import easy.domain.event.IDomainEventSubscriber;
+import easy.domain.application.subscriber.IDomainEventSubscriber;
 
 
 public class UpdateEsSubscriber implements IDomainEventSubscriber<TestDomainEvent> {

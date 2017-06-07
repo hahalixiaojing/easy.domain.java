@@ -7,7 +7,7 @@ import easy.domain.application.result.support.Result;
 import easy.domain.application.subscriber.IDomainEventManager;
 
 import easy.domain.event.IDomainEvent;
-import easy.domain.event.ISubscriber;
+import easy.domain.application.subscriber.ISubscriber;
 import easy.domain.event.TaskDomainEventManager;
 
 public abstract class BaseApplication implements IApplication {
@@ -20,6 +20,15 @@ public abstract class BaseApplication implements IApplication {
 
     public BaseApplication(IDomainEventManager manager) {
         this.manager = manager;
+    }
+
+
+    public void registerDomainEvent(Class<?> domainEventType) {
+        this.manager.registerDomainEvent(domainEventType);
+    }
+
+    public void registerSubscriber(ISubscriber subscriber) {
+        this.manager.registerSubscriber(subscriber);
     }
 
     public void registerSubscriber(Set<ISubscriber> item) throws Exception {
@@ -36,7 +45,7 @@ public abstract class BaseApplication implements IApplication {
         return result;
     }
 
-    protected <T, EventDATA extends IDomainEvent> IBaseResult<T> writeAndPublishDomainEvent(
+    protected <T, EventDATA extends IDomainEvent> IBaseResult<T> writeAndPublishEvent(
             T obj, EventDATA eventData) {
         try {
             this.publishEvent(eventData);

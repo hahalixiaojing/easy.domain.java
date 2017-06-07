@@ -1,11 +1,10 @@
 package easy.domain.event;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.ObjectUtils;
+import easy.domain.application.subscriber.ISubscriber;
 
 import easy.domain.application.subscriber.IDomainEventManager;
 
@@ -14,6 +13,16 @@ public class TaskDomainEventManager implements IDomainEventManager {
     private final List<ISubscriber> subscribers = new ArrayList<>();
     private final DomainEventPublisher publisher = new DomainEventPublisher();
 
+
+    @Override
+    public void registerDomainEvent(Class<?> domainEventType) {
+
+    }
+
+    @Override
+    public void registerSubscriber(ISubscriber subscriber) {
+        this.subscribers.add(subscriber);
+    }
 
     @Override
     public void registerDomainEvent(Set<Class<?>> domainEventTypes) {

@@ -4,15 +4,14 @@ package easy.domain.application;
 import easy.domain.application.result.IBaseResult;
 import easy.domain.application.result.IResultTransformer;
 import easy.domain.application.result.ITypeResultTransformer;
-import easy.domain.event.IDomainEvent;
-import easy.domain.event.ISubscriber;
+import easy.domain.application.subscriber.IDomainEventSubscriber;
+import easy.domain.application.subscriber.ISubscriber;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class ApplicationReturnTest {
     @Test
@@ -26,7 +25,7 @@ public class ApplicationReturnTest {
 
         Long order = orderIBaseResult.result(new IResultTransformer<Order, Long>() {
             @Override
-            public Long getValue(Order order) throws Exception {
+            public Long getValue(Order order) {
                 return order.getOrderId();
             }
         });
@@ -41,24 +40,24 @@ public class ApplicationReturnTest {
         list.add(new ITypeResultTransformer<Order>() {
 
             @Override
-            public boolean fitlerType(Class<?> longClass) throws Exception {
+            public boolean fitlerType(Class<?> longClass) {
                 return longClass == Long.class;
             }
 
             @Override
-            public Long getValue(Order order) throws Exception {
+            public Long getValue(Order order) {
                 return order.getOrderId();
             }
         });
 
         list.add(new ITypeResultTransformer<Order>() {
             @Override
-            public boolean fitlerType(Class<?> rClass) throws Exception {
+            public boolean fitlerType(Class<?> rClass) {
                 return rClass == String.class;
             }
 
             @Override
-            public String getValue(Order o) throws Exception {
+            public String getValue(Order o) {
                 return Long.toString(o.getOrderId());
             }
         });
@@ -81,14 +80,30 @@ public class ApplicationReturnTest {
 
         HashSet<ISubscriber> subscribers = new HashSet<>();
         subscribers.add(new UpdateEsSubscriber());
+        subscribers.add(new IDomainEventSubscriber<TestDomainEvent>() {
+
+            @Override
+            public void handleEvent(TestDomainEvent aDomainEvent) {
+                System.out.println("hellow word thread is " + Thread.currentThread().getId());
+            }
+
+            @Override
+            public Class<?> subscribedToEventType() {
+                return TestDomainEvent.class;
+            }
+        });
 
         testApplication.registerDomainEvent(domainEvents);
         testApplication.registerSubscriber(subscribers);
 
-        testApplication.add(1000, 10000);
-        System.out.println("thread id=" + Thread.currentThread().getId());
+        for (int i = 0; i < 2; i++) {
 
-        Thread.sleep(1000);
+            testApplication.add(1000, 10000);
+        }
+
+        System.out.print("ok");
+
+        Thread.sleep(10000);
 
 
     }

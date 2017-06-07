@@ -1,5 +1,7 @@
 package easy.domain.event;
 
+import easy.domain.application.subscriber.IDomainEventSubscriber;
+
 class Task<T extends IDomainEvent> implements Runnable {
 
 	private final IDomainEventSubscriber<T> subscriber;
