@@ -4,6 +4,7 @@ package easy.domain.application;
 import easy.domain.application.result.IBaseResult;
 import easy.domain.application.subscriber.IDomainEventSubscriber;
 import easy.domain.event.EventName;
+import org.apache.commons.lang3.StringUtils;
 
 public class TestApplication extends BaseApplication {
 
@@ -22,7 +23,7 @@ public class TestApplication extends BaseApplication {
             public Class<TestDomainEvent> subscribedToEventType() {
                 return TestDomainEvent.class;
             }
-        });
+        }, StringUtils.EMPTY);
 
     }
 

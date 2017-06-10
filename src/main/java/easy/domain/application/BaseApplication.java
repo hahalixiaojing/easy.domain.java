@@ -27,13 +27,14 @@ public abstract class BaseApplication implements IApplication {
         this.manager.registerDomainEvent(domainEventType);
     }
 
-    public void registerSubscriber(ISubscriber subscriber) {
-        this.manager.registerSubscriber(subscriber);
+    public void registerSubscriber(ISubscriber subscriber, String subscriberName) {
+        this.manager.registerSubscriber(subscriber, subscriberName);
     }
 
     public void registerSubscriber(Set<ISubscriber> item) throws Exception {
         this.manager.registerSubscriber(item);
     }
+
 
     public void registerDomainEvent(Set<Class<?>> events) throws Exception {
         this.manager.registerDomainEvent(events);
