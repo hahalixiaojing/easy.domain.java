@@ -10,6 +10,8 @@ public interface IDomainEventManager {
 
     void registerSubscriber(ISubscriber subscriber);
 
+    void registerSubscriber(ISubscriber subscriber, String alias);
+
     void registerDomainEvent(Set<Class<?>> domainEventTypes) throws Exception;
 
     void registerSubscriber(Set<ISubscriber> items) throws Exception;

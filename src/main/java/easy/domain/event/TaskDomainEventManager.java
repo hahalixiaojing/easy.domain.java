@@ -25,6 +25,11 @@ public class TaskDomainEventManager implements IDomainEventManager {
     }
 
     @Override
+    public void registerSubscriber(ISubscriber subscriber, String alias) {
+
+    }
+
+    @Override
     public void registerDomainEvent(Set<Class<?>> domainEventTypes) {
     }
 
