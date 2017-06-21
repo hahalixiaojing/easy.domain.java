@@ -1,6 +1,6 @@
 package easy.domain.base;
 
-public class BrokenRuleException extends Exception {
+public class BrokenRuleException extends RuntimeException {
 	private static final long serialVersionUID = 708303351975681548L;
 
 	private String code;
