@@ -17,4 +17,6 @@ public interface IDomainEventManager {
     void registerSubscriber(Set<ISubscriber> items) throws Exception;
 
     <T extends IDomainEvent> void publishEvent(T obj) throws Exception;
+
+    <T extends IDomainEvent> void publishEvent(T obj, String subscriber) throws Exception;
 }

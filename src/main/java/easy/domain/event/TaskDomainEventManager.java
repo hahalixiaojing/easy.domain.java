@@ -43,4 +43,9 @@ public class TaskDomainEventManager implements IDomainEventManager {
     public <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
         publisher.publish(obj, subscribers);
     }
+
+    @Override
+    public <T extends IDomainEvent> void publishEvent(T obj, String subscriber) throws Exception {
+        //TODO:
+    }
 }

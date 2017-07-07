@@ -62,4 +62,9 @@ public abstract class BaseApplication implements IApplication {
     protected <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
         this.manager.publishEvent(obj);
     }
+
+    protected <T extends IDomainEvent> void publishEvent(T obj, String subscribe) throws Exception {
+        this.manager.publishEvent(obj, subscribe);
+
+    }
 }
