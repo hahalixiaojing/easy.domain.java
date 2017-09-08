@@ -14,7 +14,8 @@ public abstract class ConcurrentEntityBase<T extends Serializable> extends Entit
     }
 
     public long getNewVersion() {
-        return ++this.oldVersion;
+        long v = this.oldVersion;
+        return ++v;
     }
 
 
