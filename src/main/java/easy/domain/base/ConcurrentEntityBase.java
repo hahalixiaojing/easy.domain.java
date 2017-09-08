@@ -3,7 +3,7 @@ package easy.domain.base;
 import java.io.Serializable;
 
 public abstract class ConcurrentEntityBase<T extends Serializable> extends EntityBase<T> {
-    private long oldVersion;
+    private long oldVersion = 1;
 
     public long getOldVersion() {
         return oldVersion;
