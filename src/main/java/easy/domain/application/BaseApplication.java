@@ -31,12 +31,12 @@ public abstract class BaseApplication implements IApplication {
         this.manager.registerSubscriber(subscriber, subscriberName);
     }
 
-    public void registerSubscriber(Set<ISubscriber> item) throws Exception {
+    public void registerSubscriber(Set<ISubscriber> item)  {
         this.manager.registerSubscriber(item);
     }
 
 
-    public void registerDomainEvent(Set<Class<?>> events) throws Exception {
+    public void registerDomainEvent(Set<Class<?>> events) {
         this.manager.registerDomainEvent(events);
     }
 
@@ -59,11 +59,11 @@ public abstract class BaseApplication implements IApplication {
         return this.write(obj);
     }
 
-    protected <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
+    protected <T extends IDomainEvent> void publishEvent(T obj)  {
         this.manager.publishEvent(obj);
     }
 
-    protected <T extends IDomainEvent> void publishEvent(T obj, String subscribe) throws Exception {
+    protected <T extends IDomainEvent> void publishEvent(T obj, String subscribe)  {
         this.manager.publishEvent(obj, subscribe);
 
     }
