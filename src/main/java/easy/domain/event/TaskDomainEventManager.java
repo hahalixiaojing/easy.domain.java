@@ -40,12 +40,12 @@ public class TaskDomainEventManager implements IDomainEventManager {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IDomainEvent> void publishEvent(T obj) throws Exception {
+    public <T extends IDomainEvent> void publishEvent(T obj)  {
         publisher.publish(obj, subscribers);
     }
 
     @Override
-    public <T extends IDomainEvent> void publishEvent(T obj, String subscriber) throws Exception {
+    public <T extends IDomainEvent> void publishEvent(T obj, String subscriber)  {
         //TODO:
     }
 }
