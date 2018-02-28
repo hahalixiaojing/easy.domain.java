@@ -46,7 +46,7 @@ public abstract class BrokenRuleObject {
     public BrokenRule findBrokenRule(String property) {
         BrokenRule rule = null;
         for (BrokenRule b : this.brokenRules) {
-            if (b.getProperty() == property) {
+            if (b.getProperty().equals(property)) {
                 rule = b;
                 break;
             }
@@ -55,6 +55,28 @@ public abstract class BrokenRuleObject {
             return emptyBrokenRule;
         }
         return rule;
+    }
+
+    public void throwBrokenRuleException() {
+        if (this.getBrokenRules().size() > 0) {
+            BrokenRule brokenRule = this.getBrokenRules().get(0);
+            throw new BrokenRuleException(brokenRule.getName(), brokenRule.getDescription());
+        }
+    }
+
+    public void throwBrokeRuleAggregateException() {
+        if (this.getBrokenRules().size() > 0) {
+
+            List<BrokenRuleException> brokenRuleExceptions = new ArrayList<>();
+
+            for (BrokenRule message : this.getBrokenRules()) {
+                BrokenRuleException brokenRuleException = new BrokenRuleException(message.getName(), message.getDescription());
+
+                brokenRuleExceptions.add(brokenRuleException);
+            }
+            throw new BrokeRuleAggregateException(brokenRuleExceptions);
+
+        }
     }
 
     public void clearBrokenRules() {
